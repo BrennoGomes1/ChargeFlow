@@ -5,7 +5,7 @@
 -- =========================================================
 -- config_predio
 -- =========================================================
-INSERT INTO config_predio (potencia_max_total_kw, tarifa_ponta, tarifa_fora_ponta, horario_ponta_inicio, horario_ponta_fim, percentual_solar)
+INSERT INTO config_predio (potencia_max_total_kw, tarifa_pico, tarifa_fora_pico, horario_pico_inicio, horario_pico_fim, percentual_solar)
 VALUES (150.00, 1.25, 0.75, '17:00', '22:00', 30.00);
 
 -- =========================================================

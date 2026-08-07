@@ -15,13 +15,13 @@ from app.schemas.simulacao import (
 )
 from app.security import obter_usuario_atual
 from app.services.potencia import (
-    REDUCAO_HORARIO_PONTA,
+    REDUCAO_HORARIO_PICO,
     CandidatoPotencia,
     alocar_potencia,
     potencia_efetiva_predio,
 )
 from app.services.priorizacao import calcular_prioridade
-from app.services.tarifacao import esta_em_horario_ponta
+from app.services.tarifacao import esta_em_horario_pico
 
 router = APIRouter(prefix="/api/simulacao", tags=["Simulacao"])
 
@@ -39,12 +39,12 @@ def simular_cenario(
 ):
     config = _config(db)
     agora = datetime.now()
-    horario_ponta = esta_em_horario_ponta(agora, config.horario_ponta_inicio, config.horario_ponta_fim)
+    horario_pico = esta_em_horario_pico(agora, config.horario_pico_inicio, config.horario_pico_fim)
 
     em_uso_real = float(
         db.query(func.coalesce(func.sum(Estacao.potencia_atual_kw), 0)).scalar()
     )
-    potencia_efetiva = potencia_efetiva_predio(float(config.potencia_max_total_kw), horario_ponta)
+    potencia_efetiva = potencia_efetiva_predio(float(config.potencia_max_total_kw), horario_pico)
     disponivel_para_simulacao = max(potencia_efetiva - em_uso_real, 0.0)
 
     candidatos = [
@@ -72,8 +72,8 @@ def simular_cenario(
         potencia_max_predio_kw=float(config.potencia_max_total_kw),
         potencia_ja_em_uso_kw=round(em_uso_real, 2),
         potencia_disponivel_kw=round(disponivel_para_simulacao, 2),
-        horario_ponta=horario_ponta,
-        reducao_horario_ponta_percent=REDUCAO_HORARIO_PONTA * 100 if horario_ponta else 0,
+        horario_pico=horario_pico,
+        reducao_horario_pico_percent=REDUCAO_HORARIO_PICO * 100 if horario_pico else 0,
         carros=resultado_carros,
         potencia_total_alocada_kw=round(sum(alocado.values()), 2),
     )
@@ -83,7 +83,7 @@ def simular_cenario(
 def potencia_tempo_real(db: Session = Depends(get_db), _usuario=Depends(obter_usuario_atual)):
     config = _config(db)
     agora = datetime.now()
-    horario_ponta = esta_em_horario_ponta(agora, config.horario_ponta_inicio, config.horario_ponta_fim)
+    horario_pico = esta_em_horario_pico(agora, config.horario_pico_inicio, config.horario_pico_fim)
 
     estacoes = db.query(Estacao).order_by(Estacao.nome).all()
     em_uso = sum(float(e.potencia_atual_kw) for e in estacoes)
@@ -93,7 +93,7 @@ def potencia_tempo_real(db: Session = Depends(get_db), _usuario=Depends(obter_us
         potencia_max_total_kw=maximo,
         potencia_em_uso_kw=round(em_uso, 2),
         potencia_disponivel_kw=round(max(maximo - em_uso, 0), 2),
-        horario_ponta=horario_ponta,
+        horario_pico=horario_pico,
         estacoes=[
             {
                 "id": e.id,

@@ -50,7 +50,7 @@ document.getElementById("btn-simular").addEventListener("click", async () => {
 function renderizarResultadoSimulacao(resultado) {
   document.getElementById("sim-resultado").classList.remove("hidden");
   document.getElementById("sim-disponivel-texto").textContent =
-    `${resultado.potencia_disponivel_kw} kW${resultado.horario_ponta ? " (reduzida por horario de ponta)" : ""}`;
+    `${resultado.potencia_disponivel_kw} kW${resultado.horario_pico ? " (reduzida por horario de pico)" : ""}`;
 
   const container = document.getElementById("sim-barras");
   const maiorPotencia = Math.max(...resultado.carros.map((c) => c.potencia_solicitada_kw), 1);

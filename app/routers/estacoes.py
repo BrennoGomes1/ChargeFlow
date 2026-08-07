@@ -9,7 +9,7 @@ from app.models.config import ConfigPredio
 from app.models.estacao import Estacao
 from app.schemas.estacao import EstacaoOut, PotenciaPredioOut
 from app.security import obter_usuario_atual
-from app.services.tarifacao import esta_em_horario_ponta
+from app.services.tarifacao import esta_em_horario_pico
 
 router = APIRouter(prefix="/api/estacoes", tags=["Estacoes"])
 
@@ -32,8 +32,8 @@ def potencia_predio(db: Session = Depends(get_db), _usuario=Depends(obter_usuari
     em_uso = db.query(func.coalesce(func.sum(Estacao.potencia_atual_kw), 0)).scalar()
     em_uso = float(em_uso)
     maximo = float(config.potencia_max_total_kw)
-    horario_ponta = esta_em_horario_ponta(
-        datetime.now(), config.horario_ponta_inicio, config.horario_ponta_fim
+    horario_pico = esta_em_horario_pico(
+        datetime.now(), config.horario_pico_inicio, config.horario_pico_fim
     )
 
     return PotenciaPredioOut(
@@ -41,5 +41,5 @@ def potencia_predio(db: Session = Depends(get_db), _usuario=Depends(obter_usuari
         potencia_em_uso_kw=round(em_uso, 2),
         potencia_disponivel_kw=round(max(maximo - em_uso, 0), 2),
         percentual_em_uso=round((em_uso / maximo) * 100, 1) if maximo > 0 else 0,
-        horario_ponta=horario_ponta,
+        horario_pico=horario_pico,
     )

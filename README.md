@@ -17,9 +17,9 @@ pratica para o motorista que chega e precisa carregar.
 - **Distribuicao inteligente de potencia** — algoritmo de water-filling que
   reparte a potencia disponivel do predio entre os carros conectados,
   priorizando quem esta com bateria mais baixa e reduzindo a potencia geral em
-  horario de ponta.
-- **Cobranca automatica** — cada sessao registra kWh consumido, horario (ponta
-  ou fora de ponta) e calcula o custo automaticamente, com corte quando o
+  horario de pico.
+- **Cobranca automatica** — cada sessao registra kWh consumido, horario (pico
+  ou fora de pico) e calcula o custo automaticamente, com corte quando o
   usuario atinge seu limite de % ou de gasto.
 - **Fila inteligente** — quando todas as estacoes estao ocupadas, o motorista
   entra numa fila ordenada por prioridade e recebe uma previsao de espera.
@@ -50,7 +50,7 @@ chargeflow/
 │   └── services/               # Logica de negocio
 │       ├── potencia.py        # Algoritmo de distribuicao inteligente (water-filling)
 │       ├── priorizacao.py     # Regras de prioridade por bateria
-│       ├── tarifacao.py       # Calculo de custo ponta/fora de ponta
+│       ├── tarifacao.py       # Calculo de custo pico/fora de pico
 │       ├── sustentabilidade.py # CO2 evitado, % solar
 │       └── fila.py            # Gerenciamento de fila
 ├── frontend/
@@ -159,7 +159,7 @@ Se usar portas diferentes de 5500/5501, adicione-as em `CORS_ORIGINS` no
 
 ## Logica do algoritmo de potencia
 
-1. Calcula a potencia efetiva do predio (reduz 20% em horario de ponta, 17h–22h).
+1. Calcula a potencia efetiva do predio (reduz 20% em horario de pico, 17h–22h).
 2. Cada carro ativo pede ate a potencia maxima da sua estação.
 3. A potencia disponivel e distribuida por *water-filling* ponderado por
    prioridade: bateria < 30% pesa 3x, 30–70% pesa 2x, > 70% pesa 1x — quem
@@ -189,8 +189,8 @@ Veja a lista completa e interativa em `/docs`. Resumo:
 ## Checklist para o Next
 
 - [x] Back-end FastAPI completo (auth, veiculos, estacoes, sessoes, fila, simulacao, dashboard)
-- [x] Algoritmo de potencia com priorizacao por bateria e reducao em horario de ponta
-- [x] Calculo de tarifa ponta/fora de ponta e de CO2 evitado
+- [x] Algoritmo de potencia com priorizacao por bateria e reducao em horario de pico
+- [x] Calculo de tarifa pico/fora de pico e de CO2 evitado
 - [x] App mobile do usuario (liberar entrada, iniciar recarga, status em tempo real, historico)
 - [x] Painel admin (mapa de vagas, barra de potencia, graficos, simulacao de cenario, ranking)
 - [ ] Popular o banco com dados reais/mais realistas para a demo

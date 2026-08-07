@@ -1,6 +1,6 @@
 """Calculo de tarifa e custo das sessoes de recarga.
 
-Horario de ponta: tarifa mais cara. Fora de ponta: tarifa mais barata. Quando
+Horario de pico: tarifa mais cara. Fora de pico: tarifa mais barata. Quando
 uma sessao cruza os dois horarios, o consumo e dividido proporcionalmente ao
 tempo passado em cada faixa.
 """
@@ -8,27 +8,27 @@ tempo passado em cada faixa.
 from datetime import datetime, time, timedelta
 
 
-def esta_em_horario_ponta(momento: datetime, inicio_ponta: time, fim_ponta: time) -> bool:
+def esta_em_horario_pico(momento: datetime, inicio_pico: time, fim_pico: time) -> bool:
     hora = momento.time()
-    if inicio_ponta <= fim_ponta:
-        return inicio_ponta <= hora < fim_ponta
-    return hora >= inicio_ponta or hora < fim_ponta  # faixa cruza a meia-noite
+    if inicio_pico <= fim_pico:
+        return inicio_pico <= hora < fim_pico
+    return hora >= inicio_pico or hora < fim_pico  # faixa cruza a meia-noite
 
 
 def tarifa_vigente(
     momento: datetime,
-    tarifa_ponta: float,
-    tarifa_fora_ponta: float,
-    inicio_ponta: time,
-    fim_ponta: time,
+    tarifa_pico: float,
+    tarifa_fora_pico: float,
+    inicio_pico: time,
+    fim_pico: time,
 ) -> float:
-    if esta_em_horario_ponta(momento, inicio_ponta, fim_ponta):
-        return tarifa_ponta
-    return tarifa_fora_ponta
+    if esta_em_horario_pico(momento, inicio_pico, fim_pico):
+        return tarifa_pico
+    return tarifa_fora_pico
 
 
-def _dividir_kwh_ponta_fora_ponta(
-    inicio: datetime, fim: datetime, kwh_total: float, inicio_ponta: time, fim_ponta: time
+def _dividir_kwh_pico_fora_pico(
+    inicio: datetime, fim: datetime, kwh_total: float, inicio_pico: time, fim_pico: time
 ) -> tuple[float, float]:
     duracao_total = (fim - inicio).total_seconds()
     if duracao_total <= 0 or kwh_total <= 0:
@@ -36,30 +36,30 @@ def _dividir_kwh_ponta_fora_ponta(
 
     passos = min(max(int(duracao_total // 60), 1), 1440)
     intervalo = duracao_total / passos
-    minutos_ponta = 0
+    minutos_pico = 0
     for i in range(passos):
         momento = inicio + timedelta(seconds=intervalo * (i + 0.5))
-        if esta_em_horario_ponta(momento, inicio_ponta, fim_ponta):
-            minutos_ponta += 1
+        if esta_em_horario_pico(momento, inicio_pico, fim_pico):
+            minutos_pico += 1
 
-    proporcao_ponta = minutos_ponta / passos
-    kwh_ponta = kwh_total * proporcao_ponta
-    return kwh_ponta, kwh_total - kwh_ponta
+    proporcao_pico = minutos_pico / passos
+    kwh_pico = kwh_total * proporcao_pico
+    return kwh_pico, kwh_total - kwh_pico
 
 
 def calcular_custo_sessao(
     inicio: datetime,
     fim: datetime,
     kwh_total: float,
-    tarifa_ponta: float,
-    tarifa_fora_ponta: float,
-    inicio_ponta: time,
-    fim_ponta: time,
+    tarifa_pico: float,
+    tarifa_fora_pico: float,
+    inicio_pico: time,
+    fim_pico: time,
 ) -> tuple[float, float]:
     """Retorna (custo_total, tarifa_media_aplicada)."""
-    kwh_ponta, kwh_fora_ponta = _dividir_kwh_ponta_fora_ponta(
-        inicio, fim, kwh_total, inicio_ponta, fim_ponta
+    kwh_pico, kwh_fora_pico = _dividir_kwh_pico_fora_pico(
+        inicio, fim, kwh_total, inicio_pico, fim_pico
     )
-    custo = kwh_ponta * tarifa_ponta + kwh_fora_ponta * tarifa_fora_ponta
-    tarifa_media = (custo / kwh_total) if kwh_total > 0 else tarifa_fora_ponta
+    custo = kwh_pico * tarifa_pico + kwh_fora_pico * tarifa_fora_pico
+    tarifa_media = (custo / kwh_total) if kwh_total > 0 else tarifa_fora_pico
     return round(custo, 2), round(tarifa_media, 4)

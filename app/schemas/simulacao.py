@@ -23,8 +23,8 @@ class SimulacaoResultado(BaseModel):
     potencia_max_predio_kw: float
     potencia_ja_em_uso_kw: float
     potencia_disponivel_kw: float
-    horario_ponta: bool
-    reducao_horario_ponta_percent: float
+    horario_pico: bool
+    reducao_horario_pico_percent: float
     carros: list[CarroSimuladoResultado]
     potencia_total_alocada_kw: float
 
@@ -33,5 +33,5 @@ class EstadoTempoRealOut(BaseModel):
     potencia_max_total_kw: float
     potencia_em_uso_kw: float
     potencia_disponivel_kw: float
-    horario_ponta: bool
+    horario_pico: bool
     estacoes: list[dict]

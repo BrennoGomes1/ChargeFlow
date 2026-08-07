@@ -14,7 +14,7 @@ from app.security import obter_usuario_atual
 from app.services import fila as fila_service
 from app.services.potencia import CandidatoPotencia, alocar_potencia, potencia_efetiva_predio
 from app.services.sustentabilidade import calcular_co2_evitado_kg, calcular_energia_solar_kwh
-from app.services.tarifacao import calcular_custo_sessao, esta_em_horario_ponta, tarifa_vigente
+from app.services.tarifacao import calcular_custo_sessao, esta_em_horario_pico, tarifa_vigente
 
 router = APIRouter(prefix="/api/sessoes", tags=["Sessoes de carregamento"])
 
@@ -37,10 +37,10 @@ def _recalcular_potencia_ativas(db: Session, config: ConfigPredio) -> None:
     if not ativas:
         return
 
-    horario_ponta = esta_em_horario_ponta(
-        datetime.now(), config.horario_ponta_inicio, config.horario_ponta_fim
+    horario_pico = esta_em_horario_pico(
+        datetime.now(), config.horario_pico_inicio, config.horario_pico_fim
     )
-    potencia_disponivel = potencia_efetiva_predio(float(config.potencia_max_total_kw), horario_ponta)
+    potencia_disponivel = potencia_efetiva_predio(float(config.potencia_max_total_kw), horario_pico)
 
     candidatos = [
         CandidatoPotencia(
@@ -91,10 +91,10 @@ def _finalizar_sessao(db: Session, sessao: Sessao, config: ConfigPredio, agora: 
         sessao.inicio,
         agora,
         kwh_consumido,
-        float(config.tarifa_ponta),
-        float(config.tarifa_fora_ponta),
-        config.horario_ponta_inicio,
-        config.horario_ponta_fim,
+        float(config.tarifa_pico),
+        float(config.tarifa_fora_pico),
+        config.horario_pico_inicio,
+        config.horario_pico_fim,
     )
 
     if sessao.limite_custo and custo_total > float(sessao.limite_custo) > 0:
@@ -162,10 +162,10 @@ def iniciar_sessao(
         status="carregando",
         tarifa_aplicada=tarifa_vigente(
             datetime.now(),
-            float(config.tarifa_ponta),
-            float(config.tarifa_fora_ponta),
-            config.horario_ponta_inicio,
-            config.horario_ponta_fim,
+            float(config.tarifa_pico),
+            float(config.tarifa_fora_pico),
+            config.horario_pico_inicio,
+            config.horario_pico_fim,
         ),
     )
     estacao.status = "ocupada"
@@ -262,10 +262,10 @@ def status_sessao(
         sessao.inicio,
         agora,
         kwh_estimado,
-        float(config.tarifa_ponta),
-        float(config.tarifa_fora_ponta),
-        config.horario_ponta_inicio,
-        config.horario_ponta_fim,
+        float(config.tarifa_pico),
+        float(config.tarifa_fora_pico),
+        config.horario_pico_inicio,
+        config.horario_pico_fim,
     )
 
     atingiu_limite_percent = bateria_estimada >= float(sessao.limite_percent)

@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 from app.services.priorizacao import calcular_prioridade, peso_prioridade
 
-REDUCAO_HORARIO_PONTA = 0.20  # reduz 20% da potencia total do predio em horario de ponta
+REDUCAO_HORARIO_PICO = 0.20  # reduz 20% da potencia total do predio em horario de pico
 
 
 @dataclass
@@ -22,9 +22,9 @@ class CandidatoPotencia:
     bateria_atual_percent: float
 
 
-def potencia_efetiva_predio(potencia_max_total_kw: float, horario_ponta: bool) -> float:
-    if horario_ponta:
-        return round(potencia_max_total_kw * (1 - REDUCAO_HORARIO_PONTA), 2)
+def potencia_efetiva_predio(potencia_max_total_kw: float, horario_pico: bool) -> float:
+    if horario_pico:
+        return round(potencia_max_total_kw * (1 - REDUCAO_HORARIO_PICO), 2)
     return round(potencia_max_total_kw, 2)
 
 

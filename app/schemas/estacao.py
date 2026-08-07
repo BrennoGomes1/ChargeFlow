@@ -17,4 +17,4 @@ class PotenciaPredioOut(BaseModel):
     potencia_em_uso_kw: float
     potencia_disponivel_kw: float
     percentual_em_uso: float
-    horario_ponta: bool
+    horario_pico: bool

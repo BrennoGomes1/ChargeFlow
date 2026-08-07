@@ -11,7 +11,7 @@ async function carregarVisaoGeral() {
     document.getElementById("vg-potencia-valores").textContent =
       `${potencia.potencia_em_uso_kw} / ${potencia.potencia_max_total_kw} kW`;
     document.getElementById("vg-potencia-fill").style.width = `${Math.min(potencia.percentual_em_uso, 100)}%`;
-    document.getElementById("vg-ponta-tag").classList.toggle("hidden", !potencia.horario_ponta);
+    document.getElementById("vg-pico-tag").classList.toggle("hidden", !potencia.horario_pico);
 
     const disponiveis = estacoes.filter((e) => e.status === "disponivel").length;
     const ocupadas = estacoes.filter((e) => e.status === "ocupada").length;

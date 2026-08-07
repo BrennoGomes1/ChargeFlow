@@ -11,8 +11,8 @@ class ConfigPredio(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     potencia_max_total_kw: Mapped[float] = mapped_column(Numeric(7, 2), nullable=False)
-    tarifa_ponta: Mapped[float] = mapped_column(Numeric(6, 4), nullable=False)
-    tarifa_fora_ponta: Mapped[float] = mapped_column(Numeric(6, 4), nullable=False)
-    horario_ponta_inicio: Mapped[time] = mapped_column(Time, nullable=False, default=time(17, 0))
-    horario_ponta_fim: Mapped[time] = mapped_column(Time, nullable=False, default=time(22, 0))
+    tarifa_pico: Mapped[float] = mapped_column(Numeric(6, 4), nullable=False)
+    tarifa_fora_pico: Mapped[float] = mapped_column(Numeric(6, 4), nullable=False)
+    horario_pico_inicio: Mapped[time] = mapped_column(Time, nullable=False, default=time(17, 0))
+    horario_pico_fim: Mapped[time] = mapped_column(Time, nullable=False, default=time(22, 0))
     percentual_solar: Mapped[float] = mapped_column(Numeric(5, 2), nullable=False, default=30)

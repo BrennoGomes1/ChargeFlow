@@ -244,7 +244,7 @@ async function carregarPotencia() {
   document.getElementById("home-potencia-uso").textContent = `${p.potencia_em_uso_kw} kW em uso`;
   document.getElementById("home-potencia-max").textContent = `/ ${p.potencia_max_total_kw} kW`;
   document.getElementById("home-barra-fill").style.width = `${Math.min(p.percentual_em_uso, 100)}%`;
-  document.getElementById("home-ponta-tag").classList.toggle("hidden", !p.horario_ponta);
+  document.getElementById("home-pico-tag").classList.toggle("hidden", !p.horario_pico);
 }
 
 document.getElementById("btn-atualizar-estacoes").addEventListener("click", carregarEstacoes);

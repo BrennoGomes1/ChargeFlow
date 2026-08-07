@@ -58,10 +58,10 @@ CREATE TABLE estacoes (
 CREATE TABLE config_predio (
     id                          SERIAL PRIMARY KEY,
     potencia_max_total_kw       NUMERIC(7, 2) NOT NULL CHECK (potencia_max_total_kw > 0),
-    tarifa_ponta                NUMERIC(6, 4) NOT NULL,
-    tarifa_fora_ponta           NUMERIC(6, 4) NOT NULL,
-    horario_ponta_inicio        TIME NOT NULL DEFAULT '17:00',
-    horario_ponta_fim           TIME NOT NULL DEFAULT '22:00',
+    tarifa_pico                NUMERIC(6, 4) NOT NULL,
+    tarifa_fora_pico           NUMERIC(6, 4) NOT NULL,
+    horario_pico_inicio        TIME NOT NULL DEFAULT '17:00',
+    horario_pico_fim           TIME NOT NULL DEFAULT '22:00',
     percentual_solar            NUMERIC(5, 2) NOT NULL DEFAULT 30 CHECK (percentual_solar BETWEEN 0 AND 100)
 );
 
