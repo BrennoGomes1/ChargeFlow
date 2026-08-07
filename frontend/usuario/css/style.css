@@ -180,3 +180,21 @@ h2 { margin: 4px 0 12px; font-size: 20px; }
 .nav-btn.active { color: var(--azul); }
 
 .vazio { color: var(--texto-suave); font-size: 14px; text-align: center; padding: 20px 0; }
+
+.saldo-card { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border: none; }
+.saldo-card .resumo-linha span:first-child { color: #cbd5e1; }
+.saldo-card .link-btn { color: #7dd3fc; }
+.saldo-valor { font-size: 30px; font-weight: 800; margin: 6px 0 2px; }
+.saldo-card .subtitulo { color: #cbd5e1; }
+
+.sem-margem { margin-top: 0; margin-bottom: 0; }
+.dica { font-size: 12px; color: var(--texto-suave); margin: -6px 0 0; }
+.saldo-info-card { padding: 14px 16px; }
+.valor-destaque { font-weight: 800; color: var(--verde); font-size: 16px; }
+
+.valores-rapidos { display: flex; gap: 8px; }
+.chip-btn {
+  flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--borda);
+  background: var(--fundo-card); font-weight: 700; cursor: pointer; color: var(--texto);
+}
+.chip-btn:hover { border-color: var(--azul); color: var(--azul); }

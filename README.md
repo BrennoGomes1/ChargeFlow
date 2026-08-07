@@ -21,6 +21,11 @@ pratica para o motorista que chega e precisa carregar.
 - **Cobranca automatica** — cada sessao registra kWh consumido, horario (pico
   ou fora de pico) e calcula o custo automaticamente, com corte quando o
   usuario atinge seu limite de % ou de gasto.
+- **Saldo pre-pago por usuario** — cada usuario tem um saldo proprio que
+  recarrega quando quiser. Ao abrir o app ve quanto tem disponivel e ate
+  quantos % de bateria isso da pra carregar no veiculo cadastrado; escolhe o
+  % desejado e a recarga vai debitando desse saldo ate acabar (ou ate atingir
+  o % escolhido), sempre com um extrato de recargas e consumos.
 - **Fila inteligente** — quando todas as estacoes estao ocupadas, o motorista
   entra numa fila ordenada por prioridade e recebe uma previsao de espera.
 - **Sustentabilidade** — cada sessao calcula quanto da energia veio de fontes
@@ -178,6 +183,8 @@ Veja a lista completa e interativa em `/docs`. Resumo:
 - `GET/POST /api/veiculos`
 - `GET /api/estacoes`, `GET /api/estacoes/potencia`
 - `POST /api/acesso/entrada`, `POST /api/acesso/saida`
+- `GET /api/saldo`, `POST /api/saldo/recarregar`,
+  `GET /api/saldo/estimativa/{veiculo_id}`, `GET /api/saldo/extrato`
 - `POST /api/sessoes/iniciar`, `POST /api/sessoes/{id}/parar`,
   `GET /api/sessoes/ativas`, `GET /api/sessoes/status/{id}`,
   `GET /api/sessoes/historico`

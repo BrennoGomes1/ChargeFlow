@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, String, func
+from sqlalchemy import DateTime, Numeric, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -16,8 +16,12 @@ class Usuario(Base):
     role: Mapped[str] = mapped_column(String(20), nullable=False, default="usuario")
     empresa: Mapped[str | None] = mapped_column(String(120))
     telefone: Mapped[str | None] = mapped_column(String(30))
+    saldo: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False, default=0)
     criado_em: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     veiculos = relationship("Veiculo", back_populates="usuario", cascade="all, delete-orphan")
     sessoes = relationship("Sessao", back_populates="usuario", cascade="all, delete-orphan")
     entradas_fila = relationship("FilaEspera", back_populates="usuario", cascade="all, delete-orphan")
+    movimentacoes_saldo = relationship(
+        "MovimentacaoSaldo", back_populates="usuario", cascade="all, delete-orphan"
+    )

@@ -25,6 +25,7 @@ class UsuarioOut(BaseModel):
     role: str
     empresa: str | None
     telefone: str | None
+    saldo: float
     criado_em: datetime
 
 

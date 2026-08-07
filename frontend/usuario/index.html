@@ -80,9 +80,6 @@
           <label>Carregar ate (%)
             <input type="number" id="v-limite-percent" min="1" max="100" step="1" value="80" />
           </label>
-          <label>Limite de gasto (R$)
-            <input type="number" id="v-limite-custo" min="0" step="1" value="50" />
-          </label>
           <p class="erro" id="v-erro"></p>
           <button type="submit" class="btn-primary">Salvar veiculo</button>
         </form>
@@ -91,6 +88,15 @@
 
       <!-- TELA: HOME -->
       <section id="tela-home" class="tela hidden">
+        <div class="card saldo-card">
+          <div class="resumo-linha">
+            <span>Seu saldo</span>
+            <button id="btn-recarregar-saldo" class="link-btn">+ recarregar</button>
+          </div>
+          <div class="saldo-valor" id="home-saldo-valor">R$ 0,00</div>
+          <p class="subtitulo sem-margem" id="home-estimativa-texto"></p>
+        </div>
+
         <div class="card resumo-predio">
           <div class="resumo-linha">
             <span>Potencia do predio</span>
@@ -124,17 +130,41 @@
       <section id="tela-preferencias" class="tela hidden">
         <h2>Configurar recarga</h2>
         <p class="subtitulo" id="pref-estacao-nome"></p>
+        <div class="card saldo-info-card">
+          <div class="resumo-linha">
+            <span>Seu saldo</span>
+            <span id="pref-saldo-valor" class="valor-destaque">R$ 0,00</span>
+          </div>
+          <p class="subtitulo sem-margem" id="pref-estimativa-texto"></p>
+        </div>
         <form id="form-preferencias" class="form">
           <label>Carregar ate (%)
             <input type="number" id="pref-limite-percent" min="1" max="100" step="1" />
           </label>
-          <label>Limite de gasto (R$)
-            <input type="number" id="pref-limite-custo" min="0" step="1" />
-          </label>
+          <p class="dica">A recarga usa seu saldo automaticamente e para sozinha se o saldo acabar antes de chegar nesse %.</p>
           <p class="erro" id="pref-erro"></p>
           <button type="submit" class="btn-primary">Iniciar recarga</button>
         </form>
         <button id="btn-cancelar-preferencias" class="link-btn">cancelar</button>
+      </section>
+
+      <!-- TELA: RECARREGAR SALDO -->
+      <section id="tela-recarga-saldo" class="tela hidden">
+        <h2>Recarregar saldo</h2>
+        <p class="subtitulo">Saldo atual: <strong id="recarga-saldo-atual">R$ 0,00</strong></p>
+        <form id="form-recarga-saldo" class="form">
+          <label>Valor (R$)
+            <input type="number" id="recarga-valor" min="1" step="1" placeholder="50" required />
+          </label>
+          <div class="valores-rapidos">
+            <button type="button" class="chip-btn" data-valor="20">R$ 20</button>
+            <button type="button" class="chip-btn" data-valor="50">R$ 50</button>
+            <button type="button" class="chip-btn" data-valor="100">R$ 100</button>
+          </div>
+          <p class="erro" id="recarga-erro"></p>
+          <button type="submit" class="btn-primary">Confirmar recarga</button>
+        </form>
+        <button id="btn-cancelar-recarga" class="link-btn">cancelar</button>
       </section>
 
       <!-- TELA: SESSAO ATIVA -->

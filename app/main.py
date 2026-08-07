@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import acesso, auth, dashboard, estacoes, fila, sessoes, simulacao, veiculos
+from app.routers import acesso, auth, dashboard, estacoes, fila, saldo, sessoes, simulacao, veiculos
 
 load_dotenv()
 
@@ -35,6 +35,7 @@ app.include_router(sessoes.router)
 app.include_router(fila.router)
 app.include_router(simulacao.router)
 app.include_router(dashboard.router)
+app.include_router(saldo.router)
 
 
 @app.get("/", tags=["Status"])

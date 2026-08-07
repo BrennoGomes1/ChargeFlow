@@ -4,6 +4,7 @@ from app.models.estacao import Estacao
 from app.models.config import ConfigPredio
 from app.models.sessao import Sessao
 from app.models.fila import FilaEspera
+from app.models.movimentacao_saldo import MovimentacaoSaldo
 
 __all__ = [
     "Usuario",
@@ -12,4 +13,5 @@ __all__ = [
     "ConfigPredio",
     "Sessao",
     "FilaEspera",
+    "MovimentacaoSaldo",
 ]

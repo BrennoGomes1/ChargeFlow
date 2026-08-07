@@ -17,7 +17,6 @@ class Veiculo(Base):
     capacidade_bateria_kwh: Mapped[float] = mapped_column(Numeric(6, 2), nullable=False)
     bateria_atual_percent: Mapped[float] = mapped_column(Numeric(5, 2), nullable=False, default=0)
     limite_percent_padrao: Mapped[float] = mapped_column(Numeric(5, 2), nullable=False, default=80)
-    limite_custo_padrao: Mapped[float | None] = mapped_column(Numeric(10, 2), default=50)
     criado_em: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     usuario = relationship("Usuario", back_populates="veiculos")

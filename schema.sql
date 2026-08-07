@@ -1,6 +1,7 @@
 -- ChargeFlow - Schema PostgreSQL
 -- Sistema de recarga inteligente para veiculos eletricos em predios comerciais
 
+DROP TABLE IF EXISTS movimentacoes_saldo CASCADE;
 DROP TABLE IF EXISTS fila_espera CASCADE;
 DROP TABLE IF EXISTS sessoes CASCADE;
 DROP TABLE IF EXISTS config_predio CASCADE;
@@ -19,6 +20,7 @@ CREATE TABLE usuarios (
     role            VARCHAR(20) NOT NULL DEFAULT 'usuario' CHECK (role IN ('usuario', 'admin')),
     empresa         VARCHAR(120),
     telefone        VARCHAR(30),
+    saldo           NUMERIC(10, 2) NOT NULL DEFAULT 0 CHECK (saldo >= 0),
     criado_em       TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -34,7 +36,6 @@ CREATE TABLE veiculos (
     capacidade_bateria_kwh      NUMERIC(6, 2) NOT NULL CHECK (capacidade_bateria_kwh > 0),
     bateria_atual_percent       NUMERIC(5, 2) NOT NULL DEFAULT 0 CHECK (bateria_atual_percent BETWEEN 0 AND 100),
     limite_percent_padrao       NUMERIC(5, 2) NOT NULL DEFAULT 80 CHECK (limite_percent_padrao BETWEEN 1 AND 100),
-    limite_custo_padrao         NUMERIC(10, 2) DEFAULT 50,
     criado_em                   TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE (usuario_id, placa)
 );
@@ -105,3 +106,19 @@ CREATE TABLE fila_espera (
 );
 
 CREATE INDEX idx_fila_status ON fila_espera(status);
+
+-- =========================================================
+-- movimentacoes_saldo (extrato: recargas de credito e consumo em sessoes)
+-- =========================================================
+CREATE TABLE movimentacoes_saldo (
+    id              SERIAL PRIMARY KEY,
+    usuario_id      INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    tipo            VARCHAR(10) NOT NULL CHECK (tipo IN ('recarga', 'consumo')),
+    valor           NUMERIC(10, 2) NOT NULL CHECK (valor > 0),
+    saldo_apos      NUMERIC(10, 2) NOT NULL,
+    sessao_id       INTEGER REFERENCES sessoes(id) ON DELETE SET NULL,
+    descricao       VARCHAR(200),
+    criado_em       TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_movimentacoes_usuario ON movimentacoes_saldo(usuario_id);

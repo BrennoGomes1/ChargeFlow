@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session, joinedload
 from app.database import get_db
 from app.models.config import ConfigPredio
 from app.models.estacao import Estacao
+from app.models.movimentacao_saldo import MovimentacaoSaldo
 from app.models.sessao import Sessao
 from app.models.usuario import Usuario
 from app.models.veiculo import Veiculo
@@ -78,6 +79,7 @@ def _reavaliar_fila(db: Session) -> None:
 def _finalizar_sessao(db: Session, sessao: Sessao, config: ConfigPredio, agora: datetime) -> Sessao:
     veiculo = sessao.veiculo
     estacao = sessao.estacao
+    usuario = sessao.usuario
 
     horas_decorridas = max((agora - sessao.inicio).total_seconds() / 3600, 0.0)
     kwh_consumido = float(sessao.potencia_alocada_kw) * horas_decorridas
@@ -121,6 +123,19 @@ def _finalizar_sessao(db: Session, sessao: Sessao, config: ConfigPredio, agora: 
     estacao.status = "disponivel"
     estacao.potencia_atual_kw = 0
 
+    if sessao.custo_total > 0:
+        usuario.saldo = max(float(usuario.saldo) - float(sessao.custo_total), 0)
+        db.add(
+            MovimentacaoSaldo(
+                usuario_id=usuario.id,
+                tipo="consumo",
+                valor=float(sessao.custo_total),
+                saldo_apos=usuario.saldo,
+                sessao_id=sessao.id,
+                descricao=f"Recarga do veiculo {veiculo.placa}",
+            )
+        )
+
     db.flush()
     _recalcular_potencia_ativas(db, config)
     _reavaliar_fila(db)
@@ -151,6 +166,18 @@ def iniciar_sessao(
     if sessao_ativa:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Este veiculo ja possui uma recarga em andamento")
 
+    saldo_disponivel = float(usuario.saldo)
+    if saldo_disponivel <= 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Saldo insuficiente para iniciar uma recarga. Recarregue seu saldo.",
+        )
+
+    # O limite de gasto da sessao nunca pode passar do saldo disponivel do
+    # usuario - se ele pedir um limite maior (ou nao informar nenhum), o
+    # saldo vira o teto.
+    limite_custo_efetivo = min(dados.limite_custo, saldo_disponivel) if dados.limite_custo else saldo_disponivel
+
     config = _config(db)
 
     sessao = Sessao(
@@ -158,7 +185,7 @@ def iniciar_sessao(
         estacao_id=estacao.id,
         usuario_id=usuario.id,
         limite_percent=dados.limite_percent or float(veiculo.limite_percent_padrao),
-        limite_custo=dados.limite_custo if dados.limite_custo is not None else veiculo.limite_custo_padrao,
+        limite_custo=limite_custo_efetivo,
         status="carregando",
         tarifa_aplicada=tarifa_vigente(
             datetime.now(),

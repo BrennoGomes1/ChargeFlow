@@ -15,6 +15,7 @@ const state = {
   pollSessaoTimer: null,
   pollFilaTimer: null,
   modoNovoVeiculo: false,
+  saldoAtual: 0,
 };
 
 async function api(path, { method = "GET", body = null } = {}) {
@@ -136,7 +137,6 @@ document.getElementById("btn-trocar-veiculo").addEventListener("click", () => {
   document.getElementById("form-veiculo").reset();
   document.getElementById("v-bateria").value = 50;
   document.getElementById("v-limite-percent").value = 80;
-  document.getElementById("v-limite-custo").value = 50;
   mostrar("veiculo");
 });
 
@@ -159,7 +159,6 @@ document.getElementById("form-veiculo").addEventListener("submit", async (e) => 
         capacidade_bateria_kwh: Number(document.getElementById("v-capacidade").value),
         bateria_atual_percent: Number(document.getElementById("v-bateria").value),
         limite_percent_padrao: Number(document.getElementById("v-limite-percent").value || 80),
-        limite_custo_padrao: Number(document.getElementById("v-limite-custo").value || 50),
       },
     });
     state.veiculos.push(veiculo);
@@ -200,15 +199,73 @@ function renderVeiculoCard() {
     seletor.addEventListener("change", (e) => {
       state.veiculoAtual = state.veiculos.find((x) => x.id === Number(e.target.value));
       renderVeiculoCard();
+      carregarEstimativaHome();
     });
   }
 }
+
+// ---------------- SALDO ----------------
+
+async function carregarSaldo() {
+  const s = await api("/api/saldo");
+  state.saldoAtual = s.saldo_atual;
+  document.getElementById("home-saldo-valor").textContent = formatarMoeda(s.saldo_atual);
+  return s.saldo_atual;
+}
+
+async function carregarEstimativaHome() {
+  const elTexto = document.getElementById("home-estimativa-texto");
+  if (!state.veiculoAtual) {
+    elTexto.textContent = "";
+    return;
+  }
+  try {
+    const est = await api(`/api/saldo/estimativa/${state.veiculoAtual.id}`);
+    elTexto.textContent =
+      `Com esse saldo, da pra carregar o ${state.veiculoAtual.modelo} ate ${est.percentual_maximo_alcancavel.toFixed(0)}%`;
+  } catch (err) {
+    elTexto.textContent = "";
+  }
+}
+
+document.getElementById("btn-recarregar-saldo").addEventListener("click", () => {
+  document.getElementById("recarga-saldo-atual").textContent = formatarMoeda(state.saldoAtual);
+  document.getElementById("recarga-erro").textContent = "";
+  document.getElementById("form-recarga-saldo").reset();
+  mostrar("recarga-saldo");
+});
+
+document.getElementById("btn-cancelar-recarga").addEventListener("click", () => mostrar("home"));
+
+document.querySelectorAll(".chip-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.getElementById("recarga-valor").value = btn.dataset.valor;
+  });
+});
+
+document.getElementById("form-recarga-saldo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const erroEl = document.getElementById("recarga-erro");
+  erroEl.textContent = "";
+  try {
+    const resp = await api("/api/saldo/recarregar", {
+      method: "POST",
+      body: { valor: Number(document.getElementById("recarga-valor").value) },
+    });
+    state.saldoAtual = resp.saldo_atual;
+    mostrar("home");
+    loadHome();
+  } catch (err) {
+    erroEl.textContent = err.message;
+  }
+});
 
 // ---------------- HOME / ESTACOES / POTENCIA ----------------
 
 async function loadHome() {
   renderVeiculoCard();
-  await Promise.all([carregarEstacoes(), carregarPotencia()]);
+  await Promise.all([carregarEstacoes(), carregarPotencia(), carregarSaldo()]);
+  await carregarEstimativaHome();
 }
 
 async function carregarEstacoes() {
@@ -261,17 +318,28 @@ document.getElementById("btn-liberar-entrada").addEventListener("click", async (
 
 // ---------------- PREFERENCIAS / INICIAR RECARGA ----------------
 
-function selecionarEstacao(estacao) {
+async function selecionarEstacao(estacao) {
   if (!state.veiculoAtual) {
     alert("Cadastre um veiculo primeiro.");
+    return;
+  }
+  if (state.saldoAtual <= 0) {
+    alert("Seu saldo esta zerado. Recarregue seu saldo antes de iniciar uma recarga.");
     return;
   }
   state.estacaoSelecionada = estacao;
   document.getElementById("pref-estacao-nome").textContent = `${estacao.nome} - ${estacao.localizacao || ""}`;
   document.getElementById("pref-limite-percent").value = state.veiculoAtual.limite_percent_padrao;
-  document.getElementById("pref-limite-custo").value = state.veiculoAtual.limite_custo_padrao ?? 50;
   document.getElementById("pref-erro").textContent = "";
+  document.getElementById("pref-saldo-valor").textContent = formatarMoeda(state.saldoAtual);
+  document.getElementById("pref-estimativa-texto").textContent = "";
   mostrar("preferencias");
+
+  try {
+    const est = await api(`/api/saldo/estimativa/${state.veiculoAtual.id}`);
+    document.getElementById("pref-estimativa-texto").textContent =
+      `Com esse saldo voce chega a ${est.percentual_maximo_alcancavel.toFixed(0)}% de bateria.`;
+  } catch (err) { /* estimativa e so um complemento, ignora falha */ }
 }
 
 document.getElementById("btn-cancelar-preferencias").addEventListener("click", () => mostrar("home"));
@@ -287,7 +355,6 @@ document.getElementById("form-preferencias").addEventListener("submit", async (e
         veiculo_id: state.veiculoAtual.id,
         estacao_id: state.estacaoSelecionada.id,
         limite_percent: Number(document.getElementById("pref-limite-percent").value),
-        limite_custo: Number(document.getElementById("pref-limite-custo").value),
       },
     });
     state.sessaoAtivaId = sessao.id;

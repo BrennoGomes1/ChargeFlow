@@ -10,7 +10,6 @@ class VeiculoCreate(BaseModel):
     capacidade_bateria_kwh: float = Field(gt=0)
     bateria_atual_percent: float = Field(default=0, ge=0, le=100)
     limite_percent_padrao: float = Field(default=80, ge=1, le=100)
-    limite_custo_padrao: float | None = Field(default=50, ge=0)
 
 
 class VeiculoOut(BaseModel):
@@ -24,5 +23,4 @@ class VeiculoOut(BaseModel):
     capacidade_bateria_kwh: float
     bateria_atual_percent: float
     limite_percent_padrao: float
-    limite_custo_padrao: float | None
     criado_em: datetime
