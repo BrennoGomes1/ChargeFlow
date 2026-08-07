@@ -26,7 +26,7 @@ pratica para o motorista que chega e precisa carregar.
 - **Sustentabilidade** — cada sessao calcula quanto da energia veio de fontes
   solares e o CO2 evitado (fator de emissao do SIN: 0.0817 kg/kWh).
 - **Dashboard visual** — app mobile para o motorista e painel desktop para o
-  administrador do predio, com simulacao de cenarios ao vivo.
+  administrador do predio, com simulação de cenarios ao vivo.
 
 ## Stack tecnica
 
