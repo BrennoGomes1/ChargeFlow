@@ -62,39 +62,92 @@ chargeflow/
 └── .env.example
 ```
 
-## Como rodar
+## Como rodar (primeira vez, em qualquer PC do time)
 
-### 1. Banco de dados
+Pre-requisitos: **Python 3.11+**, **PostgreSQL 14+** (instalado e rodando como
+servico) e **git**.
 
-Crie um banco PostgreSQL e rode o schema e o seed:
+- Windows: [postgresql.org/download/windows](https://www.postgresql.org/download/windows/)
+  (o instalador ja sobe o servico automaticamente e pede uma senha para o
+  usuario `postgres` — anote essa senha).
+- Mac: `brew install postgresql@16 && brew services start postgresql@16`
+- Linux (Debian/Ubuntu): `sudo apt install postgresql && sudo systemctl start postgresql`
+
+### 1. Clonar o repositorio
 
 ```bash
-createdb chargeflow
-psql -d chargeflow -f schema.sql
-psql -d chargeflow -f seed.sql
+git clone <URL_DO_REPOSITORIO_NO_GITHUB>
+cd chargeflow
 ```
 
-### 2. Back-end
+### 2. Criar o banco e o usuario do projeto
+
+Rode isto uma vez (vai pedir a senha do superusuario `postgres` que voce
+definiu na instalacao):
+
+```bash
+psql -U postgres -c "CREATE ROLE chargeflow LOGIN PASSWORD 'chargeflow';"
+psql -U postgres -c "CREATE DATABASE chargeflow OWNER chargeflow;"
+```
+
+Depois aplique o schema e os dados de teste:
+
+```bash
+psql -U chargeflow -d chargeflow -f schema.sql
+psql -U chargeflow -d chargeflow -f seed.sql
+```
+
+(`schema.sql` comeca com `DROP TABLE IF EXISTS`, entao pode rodar de novo a
+qualquer momento para resetar o banco para o estado inicial do seed.)
+
+### 3. Configurar e subir o back-end
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate          # Windows
+.venv\Scripts\activate          # Windows (Mac/Linux: source .venv/bin/activate)
 pip install -r requirements.txt
 
-copy .env.example .env          # e ajuste DATABASE_URL / JWT_SECRET_KEY
+copy .env.example .env          # Windows (Mac/Linux: cp .env.example .env)
+```
+
+Abra o `.env` criado e confira `DATABASE_URL` — se voce usou o mesmo
+usuario/senha do passo 2 (`chargeflow`/`chargeflow`), o valor padrao ja
+funciona sem alterar nada. Troque `JWT_SECRET_KEY` por qualquer texto
+aleatorio proprio (cada integrante pode ter o seu, so precisa bater entre
+subir e usar na mesma maquina).
+
+```bash
 uvicorn app.main:app --reload
 ```
 
 A API sobe em `http://localhost:8000`. Documentacao automatica (Swagger) em
-`http://localhost:8000/docs`.
+`http://localhost:8000/docs` — bom lugar para testar os endpoints sem
+depender do front-end.
 
-### 3. Front-end
+### 4. Subir o front-end
 
-Os arquivos em `frontend/usuario` e `frontend/admin` sao HTML/CSS/JS estaticos —
-basta abrir `index.html` num servidor estatico local (ex: extensao "Live Server"
-do VS Code, ou `python -m http.server` dentro de cada pasta) enquanto o back-end
-roda em paralelo. Por padrao o front-end aponta para `http://localhost:8000`
-(ajuste a constante `API_BASE` em `js/app.js` / `js/api.js` se necessario).
+O front-end e HTML/CSS/JS puro (sem build). Cada visao precisa rodar num
+servidor estatico local — abrir o `index.html` direto no navegador (via
+`file://`) nao funciona por causa de CORS. Com o `.venv` ja ativado, abra
+**dois terminais novos** (deixando o back-end rodando no primeiro):
+
+```bash
+# terminal 2 — app do usuario
+cd frontend/usuario
+python -m http.server 5500
+
+# terminal 3 — painel admin
+cd frontend/admin
+python -m http.server 5501
+```
+
+Depois acesse:
+
+- App mobile do usuario: `http://localhost:5500`
+- Painel admin (desktop): `http://localhost:5501`
+
+Se usar portas diferentes de 5500/5501, adicione-as em `CORS_ORIGINS` no
+`.env` (separadas por virgula) e reinicie o `uvicorn`.
 
 **Usuarios de teste (seed.sql)** — senha `senha123` para todos:
 
