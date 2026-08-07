@@ -26,7 +26,7 @@ pratica para o motorista que chega e precisa carregar.
 - **Sustentabilidade** — cada sessao calcula quanto da energia veio de fontes
   solares e o CO2 evitado (fator de emissao do SIN: 0.0817 kg/kWh).
 - **Dashboard visual** — app mobile para o motorista e painel desktop para o
-  administrador do predio, com simulacao de cenarios ao vivo.
+  administrador do predio, com simulação de cenarios ao vivo.
 
 ## Stack tecnica
 
@@ -160,7 +160,7 @@ Se usar portas diferentes de 5500/5501, adicione-as em `CORS_ORIGINS` no
 ## Logica do algoritmo de potencia
 
 1. Calcula a potencia efetiva do predio (reduz 20% em horario de ponta, 17h–22h).
-2. Cada carro ativo pede ate a potencia maxima da sua estacao.
+2. Cada carro ativo pede ate a potencia maxima da sua estação.
 3. A potencia disponivel e distribuida por *water-filling* ponderado por
    prioridade: bateria < 30% pesa 3x, 30–70% pesa 2x, > 70% pesa 1x — quem
    satura o proprio teto sai da rodada e o resto e redistribuido entre os
