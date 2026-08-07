@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ChargeFlow Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- TELA DE LOGIN -->
+  <section id="tela-login" class="login-wrap">
+    <form id="form-login" class="login-card">
+      <div class="brand"><span class="brand-dot"></span>ChargeFlow <small>admin</small></div>
+      <label>Email
+        <input type="email" id="login-email" required placeholder="admin@chargeflow.com" />
+      </label>
+      <label>Senha
+        <input type="password" id="login-senha" required placeholder="********" />
+      </label>
+      <p class="erro" id="login-erro"></p>
+      <button type="submit" class="btn-primary">Entrar</button>
+    </form>
+  </section>
+
+  <!-- PAINEL ADMIN -->
+  <div id="painel" class="painel hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-dot"></span>ChargeFlow</div>
+      <nav>
+        <button class="nav-item active" data-secao="visao-geral">Visao geral</button>
+        <button class="nav-item" data-secao="consumo">Consumo</button>
+        <button class="nav-item" data-secao="sustentabilidade">Sustentabilidade</button>
+        <button class="nav-item" data-secao="simulacao">Simular cenario</button>
+        <button class="nav-item" data-secao="ranking">Ranking</button>
+      </nav>
+      <button id="btn-sair" class="btn-sair">Sair</button>
+    </aside>
+
+    <main class="conteudo">
+
+      <!-- VISAO GERAL -->
+      <section id="secao-visao-geral" class="secao">
+        <div class="secao-cabecalho">
+          <h1>Visao geral</h1>
+          <span id="vg-ponta-tag" class="tag hidden">horario de ponta (-20% potencia)</span>
+        </div>
+
+        <div class="cartao potencia-card">
+          <div class="potencia-topo">
+            <span class="potencia-label">Potencia do predio</span>
+            <span id="vg-potencia-valores" class="potencia-valores">0 / 0 kW</span>
+          </div>
+          <div class="meter">
+            <div id="vg-potencia-fill" class="meter-fill"></div>
+          </div>
+        </div>
+
+        <div class="grid-tiles">
+          <div class="stat-tile"><span class="stat-label">Estacoes disponiveis</span><span id="vg-disponiveis" class="stat-valor good">0</span></div>
+          <div class="stat-tile"><span class="stat-label">Estacoes ocupadas</span><span id="vg-ocupadas" class="stat-valor">0</span></div>
+          <div class="stat-tile"><span class="stat-label">Em manutencao/offline</span><span id="vg-indisponiveis" class="stat-valor muted">0</span></div>
+        </div>
+
+        <h2>Mapa de vagas</h2>
+        <div id="mapa-vagas" class="mapa-vagas"></div>
+      </section>
+
+      <!-- CONSUMO -->
+      <section id="secao-consumo" class="secao hidden">
+        <div class="secao-cabecalho">
+          <h1>Consumo</h1>
+          <div class="periodo-seletor">
+            <button class="periodo-btn active" data-periodo="dia">Dia</button>
+            <button class="periodo-btn" data-periodo="semana">Semana</button>
+            <button class="periodo-btn" data-periodo="mes">Mes</button>
+          </div>
+        </div>
+        <div class="grid-tiles">
+          <div class="stat-tile"><span class="stat-label">kWh total</span><span id="consumo-kwh" class="stat-valor">0</span></div>
+          <div class="stat-tile"><span class="stat-label">Custo total</span><span id="consumo-custo" class="stat-valor">R$ 0,00</span></div>
+        </div>
+        <div class="cartao chart-card">
+          <canvas id="grafico-consumo" height="110"></canvas>
+        </div>
+      </section>
+
+      <!-- SUSTENTABILIDADE -->
+      <section id="secao-sustentabilidade" class="secao hidden">
+        <h1>Sustentabilidade</h1>
+        <div class="grid-tiles tres">
+          <div class="stat-tile"><span class="stat-label">kWh total</span><span id="sus-kwh-total" class="stat-valor">0</span></div>
+          <div class="stat-tile"><span class="stat-label">kWh solar</span><span id="sus-kwh-solar" class="stat-valor good">0</span></div>
+          <div class="stat-tile"><span class="stat-label">CO2 evitado</span><span id="sus-co2" class="stat-valor good">0 kg</span></div>
+        </div>
+        <div class="cartao">
+          <div class="potencia-topo">
+            <span class="potencia-label">% de energia renovavel (solar)</span>
+            <span id="sus-percentual-texto" class="potencia-valores">0%</span>
+          </div>
+          <div class="meter">
+            <div id="sus-percentual-fill" class="meter-fill eco"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SIMULACAO -->
+      <section id="secao-simulacao" class="secao hidden">
+        <div class="secao-cabecalho">
+          <h1>Simular cenario</h1>
+          <button id="btn-preset-5" class="link-btn">gerar 5 carros de exemplo</button>
+        </div>
+        <p class="subtitulo">Simule varios carros chegando ao mesmo tempo e veja o algoritmo de distribuicao de potencia decidir quem recebe mais.</p>
+
+        <table class="tabela-simulacao">
+          <thead>
+            <tr><th>Nome</th><th>Bateria (%)</th><th>Potencia solicitada (kW)</th><th></th></tr>
+          </thead>
+          <tbody id="sim-linhas"></tbody>
+        </table>
+        <button id="btn-add-carro" class="link-btn">+ adicionar carro</button>
+
+        <div class="acoes-simulacao">
+          <button id="btn-simular" class="btn-primary">Simular cenario</button>
+        </div>
+
+        <div id="sim-resultado" class="cartao hidden">
+          <div class="potencia-topo">
+            <span class="potencia-label">Potencia disponivel para os carros simulados</span>
+            <span id="sim-disponivel-texto" class="potencia-valores">0 kW</span>
+          </div>
+          <div id="sim-barras" class="sim-barras"></div>
+        </div>
+      </section>
+
+      <!-- RANKING -->
+      <section id="secao-ranking" class="secao hidden">
+        <h1>Ranking de consumo</h1>
+        <div class="cartao">
+          <div id="ranking-lista" class="ranking-lista"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/simulacao.js"></script>
+</body>
+</html>

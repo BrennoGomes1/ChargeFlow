@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>ChargeFlow</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="phone">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span>ChargeFlow</span>
+      </div>
+      <button id="btn-sair" class="link-btn hidden">Sair</button>
+    </header>
+
+    <main id="conteudo">
+
+      <!-- TELA: AUTENTICACAO -->
+      <section id="tela-auth" class="tela">
+        <div class="auth-tabs">
+          <button class="tab-btn active" data-tab="login">Entrar</button>
+          <button class="tab-btn" data-tab="registro">Criar conta</button>
+        </div>
+
+        <form id="form-login" class="form">
+          <label>Email
+            <input type="email" id="login-email" required placeholder="voce@empresa.com" />
+          </label>
+          <label>Senha
+            <input type="password" id="login-senha" required placeholder="********" />
+          </label>
+          <p class="erro" id="login-erro"></p>
+          <button type="submit" class="btn-primary">Entrar</button>
+        </form>
+
+        <form id="form-registro" class="form hidden">
+          <label>Nome
+            <input type="text" id="reg-nome" required placeholder="Seu nome" />
+          </label>
+          <label>Email
+            <input type="email" id="reg-email" required placeholder="voce@empresa.com" />
+          </label>
+          <label>Senha
+            <input type="password" id="reg-senha" required minlength="6" placeholder="minimo 6 caracteres" />
+          </label>
+          <label>Empresa
+            <input type="text" id="reg-empresa" placeholder="Opcional" />
+          </label>
+          <label>Telefone
+            <input type="text" id="reg-telefone" placeholder="Opcional" />
+          </label>
+          <p class="erro" id="reg-erro"></p>
+          <button type="submit" class="btn-primary">Criar conta</button>
+        </form>
+      </section>
+
+      <!-- TELA: CADASTRO DE VEICULO (primeiro uso) -->
+      <section id="tela-veiculo" class="tela hidden">
+        <h2>Cadastre seu veiculo</h2>
+        <p class="subtitulo">Antes de carregar, precisamos saber qual carro voce dirige.</p>
+        <form id="form-veiculo" class="form">
+          <label>Placa
+            <input type="text" id="v-placa" required placeholder="ABC1D23" />
+          </label>
+          <label>Modelo
+            <input type="text" id="v-modelo" required placeholder="Model 3" />
+          </label>
+          <label>Marca
+            <input type="text" id="v-marca" placeholder="Tesla" />
+          </label>
+          <label>Capacidade da bateria (kWh)
+            <input type="number" id="v-capacidade" required min="1" step="0.1" placeholder="60" />
+          </label>
+          <label>Bateria atual (%)
+            <input type="number" id="v-bateria" required min="0" max="100" step="1" value="50" />
+          </label>
+          <label>Carregar ate (%)
+            <input type="number" id="v-limite-percent" min="1" max="100" step="1" value="80" />
+          </label>
+          <label>Limite de gasto (R$)
+            <input type="number" id="v-limite-custo" min="0" step="1" value="50" />
+          </label>
+          <p class="erro" id="v-erro"></p>
+          <button type="submit" class="btn-primary">Salvar veiculo</button>
+        </form>
+        <button id="btn-cancelar-veiculo" class="link-btn hidden">cancelar</button>
+      </section>
+
+      <!-- TELA: HOME -->
+      <section id="tela-home" class="tela hidden">
+        <div class="card resumo-predio">
+          <div class="resumo-linha">
+            <span>Potencia do predio</span>
+            <span id="home-ponta-tag" class="tag hidden">horario de ponta</span>
+          </div>
+          <div class="barra-potencia">
+            <div id="home-barra-fill" class="barra-potencia-fill"></div>
+          </div>
+          <div class="resumo-linha pequeno">
+            <span id="home-potencia-uso">0 kW em uso</span>
+            <span id="home-potencia-max">/ 0 kW</span>
+          </div>
+        </div>
+
+        <div class="secao-titulo">
+          <h2>Seu veiculo</h2>
+          <button id="btn-trocar-veiculo" class="link-btn">+ novo veiculo</button>
+        </div>
+        <div id="home-veiculo-card" class="card veiculo-card"></div>
+
+        <div class="secao-titulo">
+          <h2>Estacoes disponiveis</h2>
+          <button id="btn-atualizar-estacoes" class="link-btn">atualizar</button>
+        </div>
+        <div id="lista-estacoes" class="lista-estacoes"></div>
+
+        <button id="btn-liberar-entrada" class="btn-secundario">Liberar entrada</button>
+      </section>
+
+      <!-- TELA: PREFERENCIAS DA RECARGA -->
+      <section id="tela-preferencias" class="tela hidden">
+        <h2>Configurar recarga</h2>
+        <p class="subtitulo" id="pref-estacao-nome"></p>
+        <form id="form-preferencias" class="form">
+          <label>Carregar ate (%)
+            <input type="number" id="pref-limite-percent" min="1" max="100" step="1" />
+          </label>
+          <label>Limite de gasto (R$)
+            <input type="number" id="pref-limite-custo" min="0" step="1" />
+          </label>
+          <p class="erro" id="pref-erro"></p>
+          <button type="submit" class="btn-primary">Iniciar recarga</button>
+        </form>
+        <button id="btn-cancelar-preferencias" class="link-btn">cancelar</button>
+      </section>
+
+      <!-- TELA: SESSAO ATIVA -->
+      <section id="tela-sessao" class="tela hidden">
+        <h2>Carregando</h2>
+        <div class="card sessao-card">
+          <div class="bateria-visual">
+            <div class="bateria-visual-fill" id="sessao-bateria-fill"></div>
+            <span id="sessao-bateria-texto">0%</span>
+          </div>
+          <div class="grid-status">
+            <div><span class="label">Potencia alocada</span><span id="sessao-potencia" class="valor">0 kW</span></div>
+            <div><span class="label">kWh consumido</span><span id="sessao-kwh" class="valor">0</span></div>
+            <div><span class="label">Custo atual</span><span id="sessao-custo" class="valor">R$ 0,00</span></div>
+            <div><span class="label">Tempo restante</span><span id="sessao-tempo" class="valor">--</span></div>
+          </div>
+        </div>
+        <button id="btn-parar-sessao" class="btn-secundario">Liberar saida / Parar recarga</button>
+      </section>
+
+      <!-- TELA: FILA DE ESPERA -->
+      <section id="tela-fila" class="tela hidden">
+        <h2>Fila de espera</h2>
+        <div class="card fila-card">
+          <p>Posicao na fila</p>
+          <div class="fila-posicao" id="fila-posicao">-</div>
+          <p><span id="fila-prioridade" class="tag"></span></p>
+          <p id="fila-previsao" class="subtitulo"></p>
+        </div>
+        <button id="btn-atualizar-fila" class="btn-secundario">Atualizar</button>
+      </section>
+
+      <!-- TELA: HISTORICO -->
+      <section id="tela-historico" class="tela hidden">
+        <h2>Historico</h2>
+        <div id="lista-historico" class="lista-historico"></div>
+      </section>
+
+    </main>
+
+    <nav id="bottom-nav" class="bottom-nav hidden">
+      <button data-nav="home" class="nav-btn active">Inicio</button>
+      <button data-nav="historico" class="nav-btn">Historico</button>
+    </nav>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
