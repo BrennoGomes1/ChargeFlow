@@ -82,7 +82,7 @@ cd chargeflow
 
 ### 2. Criar o banco e o usuario do projeto
 
-Rode isto uma vez (vai pedir a senha do superusuario `postgres` que voce
+Rode isto uma vez (vai pedir a senha do super usuário `postgres` que voce
 definiu na instalacao):
 
 ```bash
