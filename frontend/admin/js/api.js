@@ -1,4 +1,8 @@
-const API_BASE = "http://localhost:8000";
+// Por padrao usa o mesmo host de onde a pagina foi carregada, so trocando a
+// porta para a da API. Um parametro ?api=<url> na propria pagina sobrescreve
+// esse calculo automatico (necessario quando cada servico esta atras de um
+// tunel com dominio proprio, ex: cloudflared).
+const API_BASE = new URLSearchParams(window.location.search).get("api") || `http://${window.location.hostname}:8000`;
 
 const estadoAuth = {
   token: localStorage.getItem("cf_admin_token") || null,
