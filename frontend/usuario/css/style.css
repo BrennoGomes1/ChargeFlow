@@ -179,6 +179,17 @@ h2 { margin: 4px 0 12px; font-size: 20px; }
 }
 .nav-btn.active { color: var(--azul); }
 
+#nav-btn-sessao { color: var(--verde); display: flex; align-items: center; justify-content: center; gap: 6px; }
+#nav-btn-sessao.active { color: var(--verde); }
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--verde);
+  animation: pulsar 1.5s ease-in-out infinite;
+}
+@keyframes pulsar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
 .vazio { color: var(--texto-suave); font-size: 14px; text-align: center; padding: 20px 0; }
 
 .saldo-card { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border: none; }

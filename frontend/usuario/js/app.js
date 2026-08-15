@@ -394,6 +394,7 @@ document.getElementById("form-preferencias").addEventListener("submit", async (e
       },
     });
     state.sessaoAtivaId = sessao.id;
+    mostrarNavSessao();
     mostrar("sessao");
     iniciarPollingSessao();
   } catch (err) {
@@ -427,6 +428,8 @@ function iniciarPollingSessao() {
       const s = await api(`/api/sessoes/status/${state.sessaoAtivaId}`);
       if (s.status !== "carregando") {
         clearInterval(state.pollSessaoTimer);
+        state.sessaoAtivaId = null;
+        esconderNavSessao();
         alert(`Recarga finalizada - ${Number(s.kwh_consumido).toFixed(1)} kWh, ${formatarMoeda(s.custo_total)}`);
         await atualizarVeiculoAtual();
         mostrar("home");
@@ -452,6 +455,8 @@ document.getElementById("btn-parar-sessao").addEventListener("click", async () =
   try {
     const resp = await api(`/api/sessoes/${state.sessaoAtivaId}/parar`, { method: "POST" });
     clearInterval(state.pollSessaoTimer);
+    state.sessaoAtivaId = null;
+    esconderNavSessao();
     alert(resp.mensagem);
     await atualizarVeiculoAtual();
     mostrar("home");
@@ -549,11 +554,11 @@ document.querySelectorAll(".nav-btn").forEach((btn) => {
   btn.addEventListener("click", async () => {
     const destino = btn.dataset.nav;
     if (destino === "home") {
-      // Reconfere se ha uma recarga (ou fila) ativa antes de ir pra home -
-      // assim quem tocar em "Inicio" enquanto o proprio carro esta
-      // carregando volta pra tela de acompanhamento, em vez de "perder" a
-      // recarga em andamento de vista.
-      await irParaInicio();
+      mostrar("home");
+      loadHome();
+    } else if (destino === "sessao") {
+      mostrar("sessao");
+      iniciarPollingSessao();
     } else if (destino === "historico") {
       mostrar("historico");
       carregarHistorico();
@@ -561,15 +566,30 @@ document.querySelectorAll(".nav-btn").forEach((btn) => {
   });
 });
 
+function mostrarNavSessao() {
+  document.getElementById("nav-btn-sessao").classList.remove("hidden");
+}
+
+function esconderNavSessao() {
+  document.getElementById("nav-btn-sessao").classList.add("hidden");
+}
+
 // ---------------- BOOTSTRAP ----------------
 
+// So usada no login: decide pra qual tela ir de primeira (recarga em
+// andamento, fila, ou home). Depois disso a navegacao e livre - "Inicio"
+// sempre mostra a tela normal, e o botao "Carregando" (quando aparece)
+// leva de volta pro acompanhamento da recarga.
 async function irParaInicio() {
+  esconderNavSessao();
+
   try {
     const ativas = await api("/api/sessoes/ativas");
     const minha = ativas.find((s) => state.veiculos.some((v) => v.id === s.veiculo_id));
     if (minha) {
       state.sessaoAtivaId = minha.id;
       state.veiculoAtual = state.veiculos.find((v) => v.id === minha.veiculo_id) || state.veiculoAtual;
+      mostrarNavSessao();
       mostrar("sessao");
       iniciarPollingSessao();
       return;
