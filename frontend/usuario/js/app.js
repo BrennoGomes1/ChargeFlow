@@ -1,9 +1,22 @@
-// Por padrao usa o mesmo host de onde a pagina foi carregada, so trocando a
-// porta para a da API (funciona em localhost e acesso por IP na rede local).
-// Quando o front esta atras de um tunel (ex: cloudflared), cada servico tem
-// um dominio diferente, entao um parametro ?api=<url> na propria pagina
-// sobrescreve esse calculo automatico.
-const API_BASE = new URLSearchParams(window.location.search).get("api") || `http://${window.location.hostname}:8000`;
+// Ordem de prioridade pra descobrir onde esta a API:
+// 1. parametro ?api=<url> na propria pagina (usado em demos por tunel, onde
+//    cada servico ganha um dominio aleatorio diferente);
+// 2. localhost/rede local -> mesmo host da pagina, na porta 8000 (dev);
+// 3. qualquer outro dominio (ex: hospedagem definitiva) -> API de producao.
+function calcularApiBase() {
+  const override = new URLSearchParams(window.location.search).get("api");
+  if (override) return override;
+
+  const host = window.location.hostname;
+  const ehLocal =
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    /^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host);
+  if (ehLocal) return `http://${host}:8000`;
+
+  return "https://chargeflow-api.onrender.com";
+}
+const API_BASE = calcularApiBase();
 
 const state = {
   token: localStorage.getItem("cf_token") || null,
