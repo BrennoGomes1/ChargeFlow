@@ -34,6 +34,7 @@ async function carregarVisaoGeral() {
       .join("");
   } catch (err) {
     console.error(err);
+    mostrarErroGeral("Nao foi possivel carregar a visao geral. " + err.message, carregarVisaoGeral);
   }
 }
 
@@ -86,6 +87,7 @@ async function carregarConsumo() {
     });
   } catch (err) {
     console.error(err);
+    mostrarErroGeral("Nao foi possivel carregar o consumo. " + err.message, carregarConsumo);
   }
 }
 
@@ -99,6 +101,7 @@ async function carregarSustentabilidade() {
     document.getElementById("sus-percentual-fill").style.width = `${Math.min(s.percentual_renovavel, 100)}%`;
   } catch (err) {
     console.error(err);
+    mostrarErroGeral("Nao foi possivel carregar a sustentabilidade. " + err.message, carregarSustentabilidade);
   }
 }
 
@@ -126,5 +129,6 @@ async function carregarRanking() {
       .join("");
   } catch (err) {
     console.error(err);
+    mostrarErroGeral("Nao foi possivel carregar o ranking. " + err.message, carregarRanking);
   }
 }

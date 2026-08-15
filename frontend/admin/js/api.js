@@ -79,20 +79,28 @@ document.getElementById("form-login").addEventListener("submit", async (e) => {
   }
 });
 
-document.getElementById("btn-sair").addEventListener("click", () => {
-  estadoAuth.token = null;
-  estadoAuth.usuario = null;
-  localStorage.removeItem("cf_admin_token");
-  localStorage.removeItem("cf_admin_usuario");
-  document.getElementById("painel").classList.add("hidden");
-  document.getElementById("tela-login").classList.remove("hidden");
-});
+document.getElementById("btn-sair").addEventListener("click", fazerLogout);
 
 document.querySelectorAll(".nav-item").forEach((btn) => {
   btn.addEventListener("click", () => mostrarSecao(btn.dataset.secao));
 });
 
+function mostrarErroGeral(mensagem, aoTentarNovamente) {
+  document.getElementById("erro-geral-texto").textContent = mensagem;
+  document.getElementById("erro-geral").classList.remove("hidden");
+  const btn = document.getElementById("erro-geral-tentar");
+  btn.onclick = () => {
+    esconderErroGeral();
+    aoTentarNovamente();
+  };
+}
+
+function esconderErroGeral() {
+  document.getElementById("erro-geral").classList.add("hidden");
+}
+
 function mostrarSecao(secao) {
+  esconderErroGeral();
   document.querySelectorAll(".secao").forEach((el) => el.classList.add("hidden"));
   document.getElementById(`secao-${secao}`).classList.remove("hidden");
   document.querySelectorAll(".nav-item").forEach((btn) => btn.classList.toggle("active", btn.dataset.secao === secao));
@@ -109,8 +117,26 @@ function entrarNoPainel() {
   mostrarSecao("visao-geral");
 }
 
-(function initAdmin() {
-  if (estadoAuth.token && estadoAuth.usuario && estadoAuth.usuario.role === "admin") {
+function fazerLogout() {
+  estadoAuth.token = null;
+  estadoAuth.usuario = null;
+  localStorage.removeItem("cf_admin_token");
+  localStorage.removeItem("cf_admin_usuario");
+  document.getElementById("painel").classList.add("hidden");
+  document.getElementById("tela-login").classList.remove("hidden");
+}
+
+(async function initAdmin() {
+  if (!(estadoAuth.token && estadoAuth.usuario && estadoAuth.usuario.role === "admin")) {
+    return;
+  }
+  // Nao confia cegamente no que ficou salvo no navegador - confirma que o
+  // token ainda e valido antes de mostrar o painel, senao fica tudo com
+  // aparencia de "zerado" sem nenhum aviso do motivo.
+  try {
+    await api("/api/estacoes");
     entrarNoPainel();
+  } catch (err) {
+    fazerLogout();
   }
 })();
