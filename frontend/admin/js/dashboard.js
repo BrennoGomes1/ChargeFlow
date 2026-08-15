@@ -24,7 +24,7 @@ async function carregarVisaoGeral() {
     mapa.innerHTML = estacoes
       .map(
         (e) => `
-        <div class="vaga ${e.status}">
+        <div class="vaga ${e.status}" data-id="${e.id}">
           <span class="nome">${e.nome}</span>
           <span class="info">${e.localizacao || ""}</span>
           <span class="info">${e.potencia_atual_kw} / ${e.potencia_max_kw} kW</span>
@@ -32,11 +32,49 @@ async function carregarVisaoGeral() {
         </div>`
       )
       .join("");
+
+    mapa.querySelectorAll(".vaga.ocupada").forEach((el) => {
+      el.addEventListener("click", () => mostrarDetalhesVaga(Number(el.dataset.id)));
+    });
   } catch (err) {
     console.error(err);
     mostrarErroGeral("Nao foi possivel carregar a visao geral. " + err.message, carregarVisaoGeral);
   }
 }
+
+async function mostrarDetalhesVaga(estacaoId) {
+  const modal = document.getElementById("modal-vaga");
+  const conteudo = document.getElementById("modal-vaga-conteudo");
+  document.getElementById("modal-vaga-titulo").textContent = "Carregando...";
+  conteudo.innerHTML = "";
+  modal.classList.remove("hidden");
+
+  try {
+    const s = await api(`/api/estacoes/${estacaoId}/sessao`);
+    document.getElementById("modal-vaga-titulo").textContent = s.estacao_nome;
+    const prioridadeClasse = `prioridade-${s.prioridade}`;
+    conteudo.innerHTML = `
+      <div class="vaga-detalhe-linha"><span class="rotulo">Usuario</span><span class="valor">${s.usuario_nome}${s.usuario_empresa ? ` (${s.usuario_empresa})` : ""}</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Veiculo</span><span class="valor">${s.veiculo_placa} - ${s.veiculo_marca ? s.veiculo_marca + " " : ""}${s.veiculo_modelo}</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Bateria atual</span><span class="valor">${s.bateria_atual_percent}% <span class="prioridade-badge ${prioridadeClasse}">${s.prioridade}</span></span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Meta da recarga</span><span class="valor">${s.limite_percent}%</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Potencia alocada</span><span class="valor">${s.potencia_alocada_kw} kW</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">kWh ate agora</span><span class="valor">${s.kwh_consumido}</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Custo ate agora</span><span class="valor">${formatarMoeda(s.custo_total)}</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Tempo decorrido</span><span class="valor">${Math.round(s.tempo_decorrido_min)} min</span></div>
+    `;
+  } catch (err) {
+    document.getElementById("modal-vaga-titulo").textContent = "Erro";
+    conteudo.innerHTML = `<p class="vazio">${err.message}</p>`;
+  }
+}
+
+document.getElementById("btn-fechar-modal-vaga").addEventListener("click", () => {
+  document.getElementById("modal-vaga").classList.add("hidden");
+});
+document.getElementById("modal-vaga").addEventListener("click", (e) => {
+  if (e.target.id === "modal-vaga") e.target.classList.add("hidden");
+});
 
 document.querySelectorAll(".periodo-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
