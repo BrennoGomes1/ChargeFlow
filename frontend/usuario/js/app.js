@@ -549,8 +549,11 @@ document.querySelectorAll(".nav-btn").forEach((btn) => {
   btn.addEventListener("click", async () => {
     const destino = btn.dataset.nav;
     if (destino === "home") {
-      mostrar("home");
-      loadHome();
+      // Reconfere se ha uma recarga (ou fila) ativa antes de ir pra home -
+      // assim quem tocar em "Inicio" enquanto o proprio carro esta
+      // carregando volta pra tela de acompanhamento, em vez de "perder" a
+      // recarga em andamento de vista.
+      await irParaInicio();
     } else if (destino === "historico") {
       mostrar("historico");
       carregarHistorico();
@@ -560,21 +563,7 @@ document.querySelectorAll(".nav-btn").forEach((btn) => {
 
 // ---------------- BOOTSTRAP ----------------
 
-async function depoisDoLogin() {
-  try {
-    state.veiculos = await api("/api/veiculos");
-  } catch (err) {
-    document.getElementById("btn-sair").click();
-    return;
-  }
-
-  if (state.veiculos.length === 0) {
-    document.getElementById("btn-cancelar-veiculo").classList.add("hidden");
-    mostrar("veiculo");
-    return;
-  }
-  state.veiculoAtual = state.veiculos[0];
-
+async function irParaInicio() {
   try {
     const ativas = await api("/api/sessoes/ativas");
     const minha = ativas.find((s) => state.veiculos.some((v) => v.id === s.veiculo_id));
@@ -597,6 +586,23 @@ async function depoisDoLogin() {
 
   await loadHome();
   mostrar("home");
+}
+
+async function depoisDoLogin() {
+  try {
+    state.veiculos = await api("/api/veiculos");
+  } catch (err) {
+    document.getElementById("btn-sair").click();
+    return;
+  }
+
+  if (state.veiculos.length === 0) {
+    document.getElementById("btn-cancelar-veiculo").classList.add("hidden");
+    mostrar("veiculo");
+    return;
+  }
+  state.veiculoAtual = state.veiculos[0];
+  await irParaInicio();
 }
 
 (function init() {
