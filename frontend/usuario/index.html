@@ -209,6 +209,22 @@
       <button data-nav="home" class="nav-btn active">Inicio</button>
       <button data-nav="historico" class="nav-btn">Historico</button>
     </nav>
+
+    <!-- MODAL: DETALHES DA ESTACAO -->
+    <div id="modal-estacao" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-topo">
+          <h2 id="modal-estacao-nome">Estacao</h2>
+          <button id="btn-fechar-modal-estacao" class="link-btn">fechar</button>
+        </div>
+        <p class="subtitulo sem-margem" id="modal-estacao-local"></p>
+        <div class="grid-status" style="margin-top:14px">
+          <div><span class="label">Status</span><span id="modal-estacao-status" class="valor">-</span></div>
+          <div><span class="label">Potencia em uso</span><span id="modal-estacao-potencia" class="valor">-</span></div>
+        </div>
+        <p class="dica" style="margin-top:14px">Por privacidade, nao mostramos dados de quem esta carregando (bateria, custo ou tempo restante).</p>
+      </div>
+    </div>
   </div>
 
   <script src="js/app.js"></script>

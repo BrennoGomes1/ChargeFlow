@@ -307,7 +307,30 @@ async function carregarEstacoes() {
       selecionarEstacao(estacao);
     });
   });
+
+  container.querySelectorAll(".estacao-item:not(.disponivel)").forEach((el) => {
+    el.addEventListener("click", () => {
+      const estacao = estacoes.find((e) => e.id === Number(el.dataset.id));
+      mostrarDetalhesEstacao(estacao);
+    });
+  });
 }
+
+function mostrarDetalhesEstacao(estacao) {
+  document.getElementById("modal-estacao-nome").textContent = estacao.nome;
+  document.getElementById("modal-estacao-local").textContent = estacao.localizacao || "";
+  document.getElementById("modal-estacao-status").textContent = estacao.status;
+  document.getElementById("modal-estacao-potencia").textContent =
+    `${Number(estacao.potencia_atual_kw)} / ${Number(estacao.potencia_max_kw)} kW`;
+  document.getElementById("modal-estacao").classList.remove("hidden");
+}
+
+document.getElementById("btn-fechar-modal-estacao").addEventListener("click", () => {
+  document.getElementById("modal-estacao").classList.add("hidden");
+});
+document.getElementById("modal-estacao").addEventListener("click", (e) => {
+  if (e.target.id === "modal-estacao") e.target.classList.add("hidden");
+});
 
 async function carregarPotencia() {
   const p = await api("/api/estacoes/potencia");
