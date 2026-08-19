@@ -31,10 +31,10 @@ body {
 /* ---------- LOGIN ---------- */
 .login-wrap {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(160deg, #0b1220, #16233d);
+  background: linear-gradient(160deg, #0b1220, #16233d); padding: 20px; box-sizing: border-box;
 }
 .login-card {
-  background: var(--surface); border-radius: 16px; padding: 32px; width: 340px;
+  background: var(--surface); border-radius: 16px; padding: 32px; width: 340px; max-width: 100%;
   display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.35);
 }
 .login-card label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: var(--texto-secundario); }
@@ -189,3 +189,47 @@ body {
 .vaga-detalhe-linha:last-child { border-bottom: none; }
 .vaga-detalhe-linha .rotulo { color: var(--texto-mudo); font-weight: 600; }
 .vaga-detalhe-linha .valor { font-weight: 700; }
+
+/* ---------- RESPONSIVO (tablet/celular) ---------- */
+@media (max-width: 900px) {
+  .painel { flex-direction: column; }
+
+  .sidebar {
+    width: 100%; flex-direction: row; align-items: center; gap: 10px;
+    padding: 12px 14px; overflow-x: auto;
+  }
+  .sidebar .brand { flex-shrink: 0; }
+  .sidebar nav {
+    flex-direction: row; flex: initial; overflow-x: auto; gap: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-item { white-space: nowrap; padding: 8px 12px; }
+  .btn-sair { flex-shrink: 0; margin-left: auto; padding: 8px 10px; }
+
+  .conteudo { padding: 18px 16px 32px; max-width: 100%; }
+}
+
+@media (max-width: 640px) {
+  .secao h1 { font-size: 20px; }
+
+  .grid-tiles, .grid-tiles.tres { grid-template-columns: 1fr 1fr; }
+  .stat-valor { font-size: 22px; }
+
+  .secao-cabecalho { flex-direction: column; align-items: flex-start; }
+  .periodo-seletor { width: 100%; }
+  .periodo-btn { flex: 1; }
+
+  .mapa-vagas { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+
+  .tabela-simulacao { display: block; overflow-x: auto; white-space: nowrap; }
+  .tabela-simulacao th, .tabela-simulacao td { padding: 6px 10px; }
+
+  .ranking-item { flex-wrap: wrap; }
+  .ranking-valor { width: auto; margin-left: auto; }
+
+  .modal-card { padding: 18px; }
+}
+
+@media (max-width: 420px) {
+  .grid-tiles, .grid-tiles.tres { grid-template-columns: 1fr; }
+}
