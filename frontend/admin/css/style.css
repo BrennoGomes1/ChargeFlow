@@ -199,12 +199,12 @@ body {
 .modal-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .modal-topo h2 { margin: 0; font-size: 18px; }
 .vaga-detalhe-linha {
-  display: flex; justify-content: space-between; align-items: center; padding: 8px 0;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 8px 0;
   border-bottom: 1px solid var(--gridline); font-size: 14px;
 }
 .vaga-detalhe-linha:last-child { border-bottom: none; }
-.vaga-detalhe-linha .rotulo { color: var(--texto-mudo); font-weight: 600; }
-.vaga-detalhe-linha .valor { font-weight: 700; }
+.vaga-detalhe-linha .rotulo { color: var(--texto-mudo); font-weight: 600; flex-shrink: 0; padding-top: 1px; }
+.vaga-detalhe-linha .valor { font-weight: 700; text-align: right; }
 
 /* ---------- RESPONSIVO (tablet/celular) ---------- */
 @media (max-width: 900px) {
