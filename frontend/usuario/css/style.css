@@ -12,6 +12,11 @@
   --borda: #e2e8f0;
   --fundo-card: #ffffff;
   --fundo-app: #f1f5f9;
+  --meia-noite-1: #0f172a;
+  --meia-noite-2: #1e293b;
+  --texto-sobre-meia-noite: #ffffff;
+  --texto-suave-sobre-meia-noite: #94a3b8;
+  --azul-sobre-meia-noite: #7dd3fc;
 }
 
 * { box-sizing: border-box; }
@@ -30,7 +35,8 @@ body {
   width: 100%;
   max-width: 420px;
   min-height: 100vh;
-  background: var(--fundo-app);
+  background: linear-gradient(180deg, var(--meia-noite-1) 0%, var(--meia-noite-2) 55%, var(--meia-noite-2) 100%);
+  color: var(--texto-sobre-meia-noite);
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 40px rgba(0,0,0,0.4);
@@ -41,8 +47,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 18px 20px;
-  background: var(--fundo-card);
-  border-bottom: 1px solid var(--borda);
+  background: transparent;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
   position: sticky;
   top: 0;
   z-index: 5;
@@ -54,7 +60,10 @@ body {
   gap: 8px;
   font-weight: 700;
   font-size: 18px;
+  color: var(--texto-sobre-meia-noite);
 }
+
+.topbar .link-btn { color: var(--azul-sobre-meia-noite); }
 
 .brand-dot {
   width: 10px;
@@ -96,16 +105,26 @@ h2 { margin: 4px 0 12px; font-size: 20px; }
 }
 .btn-primary { background: var(--azul); color: white; }
 .btn-primary:hover { background: var(--azul-escuro); }
-.btn-secundario { background: var(--texto); color: white; margin-top: 18px; }
+.btn-secundario {
+  background: var(--fundo-card); color: var(--texto); margin-top: 18px; border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
 .btn-secundario:hover { opacity: 0.9; }
 
 .link-btn { background: none; border: none; color: var(--azul); font-weight: 600; cursor: pointer; font-size: 14px; }
 
+/* Botoes "link" que ficam soltos direto no fundo escuro (fora de cards/modais
+   brancos) precisam do azul mais claro pra continuar legiveis. */
+#btn-trocar-veiculo, #btn-atualizar-estacoes, #btn-cancelar-veiculo,
+#btn-cancelar-preferencias, #btn-cancelar-recarga {
+  color: var(--azul-sobre-meia-noite);
+}
+
 .erro { color: var(--vermelho); font-size: 13px; min-height: 16px; margin: 0; }
 
 .card {
-  background: var(--fundo-card); border-radius: 14px; padding: 16px; border: 1px solid var(--borda);
-  margin-bottom: 18px;
+  background: var(--fundo-card); color: var(--texto); border-radius: 14px; padding: 16px; border: 1px solid var(--borda);
+  margin-bottom: 18px; box-shadow: 0 6px 18px rgba(0,0,0,0.18);
 }
 
 .resumo-linha { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 14px; }
@@ -129,8 +148,9 @@ h2 { margin: 4px 0 12px; font-size: 20px; }
 
 .lista-estacoes { display: flex; flex-direction: column; gap: 10px; margin-bottom: 6px; }
 .estacao-item {
-  background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 12px;
+  background: var(--fundo-card); color: var(--texto); border: 1px solid var(--borda); border-radius: 12px;
   padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
 }
 .estacao-item.disponivel { border-left: 4px solid var(--verde); cursor: pointer; }
 .estacao-item.ocupada { border-left: 4px solid var(--vermelho); opacity: 0.7; }
@@ -163,7 +183,8 @@ h2 { margin: 4px 0 12px; font-size: 20px; }
 
 .lista-historico { display: flex; flex-direction: column; gap: 10px; }
 .historico-item {
-  background: var(--fundo-card); border: 1px solid var(--borda); border-radius: 12px; padding: 12px 14px;
+  background: var(--fundo-card); color: var(--texto); border: 1px solid var(--borda); border-radius: 12px; padding: 12px 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14);
 }
 .historico-item .topo { display: flex; justify-content: space-between; font-weight: 700; }
 .historico-item .detalhes { font-size: 12px; color: var(--texto-suave); margin-top: 4px; display: flex; gap: 10px; flex-wrap: wrap; }
@@ -171,13 +192,14 @@ h2 { margin: 4px 0 12px; font-size: 20px; }
 
 .bottom-nav {
   position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 420px; background: var(--fundo-card); border-top: 1px solid var(--borda);
+  width: 100%; max-width: 420px; background: var(--meia-noite-1); border-top: 1px solid rgba(255,255,255,0.1);
   display: flex; padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
 }
 .nav-btn {
-  flex: 1; padding: 10px; background: none; border: none; font-weight: 600; color: var(--texto-suave); cursor: pointer;
+  flex: 1; padding: 10px; background: none; border: none; font-weight: 600;
+  color: var(--texto-suave-sobre-meia-noite); cursor: pointer;
 }
-.nav-btn.active { color: var(--azul); }
+.nav-btn.active { color: var(--azul-sobre-meia-noite); }
 
 #nav-btn-sessao { color: var(--verde); display: flex; align-items: center; justify-content: center; gap: 6px; }
 #nav-btn-sessao.active { color: var(--verde); }
@@ -192,7 +214,11 @@ h2 { margin: 4px 0 12px; font-size: 20px; }
 
 .vazio { color: var(--texto-suave); font-size: 14px; text-align: center; padding: 20px 0; }
 
-.saldo-card { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border: none; }
+.saldo-card {
+  background: linear-gradient(135deg, #1e293b, #334155);
+  color: white; border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
 .saldo-card .resumo-linha span:first-child { color: #cbd5e1; }
 .saldo-card .link-btn { color: #7dd3fc; }
 .saldo-valor { font-size: 30px; font-weight: 800; margin: 6px 0 2px; }
@@ -215,7 +241,7 @@ h2 { margin: 4px 0 12px; font-size: 20px; }
   display: flex; align-items: flex-end; justify-content: center; z-index: 50;
 }
 .modal-card {
-  background: var(--fundo-card); border-radius: 16px 16px 0 0; padding: 20px;
+  background: var(--fundo-card); color: var(--texto); border-radius: 16px 16px 0 0; padding: 20px;
   width: 100%; max-width: 420px; box-shadow: 0 -10px 30px rgba(0,0,0,.2);
 }
 .modal-topo { display: flex; justify-content: space-between; align-items: center; }

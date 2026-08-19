@@ -15,6 +15,12 @@
   --amarelo-warning: #fab219;
   --vermelho-critical: #d03b3b;
   --laranja-serious: #ec835a;
+
+  --meia-noite-1: #0f172a;
+  --meia-noite-2: #1e293b;
+  --texto-sobre-meia-noite: #ffffff;
+  --texto-secundario-sobre-meia-noite: #94a3b8;
+  --azul-sobre-meia-noite: #7dd3fc;
 }
 
 * { box-sizing: border-box; }
@@ -22,8 +28,8 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: var(--page);
-  color: var(--texto);
+  background: linear-gradient(160deg, var(--meia-noite-1), var(--meia-noite-2));
+  color: var(--texto-sobre-meia-noite);
 }
 
 .hidden { display: none !important; }
@@ -34,7 +40,7 @@ body {
   background: linear-gradient(160deg, #0b1220, #16233d); padding: 20px; box-sizing: border-box;
 }
 .login-card {
-  background: var(--surface); border-radius: 16px; padding: 32px; width: 340px; max-width: 100%;
+  background: var(--surface); color: var(--texto); border-radius: 16px; padding: 32px; width: 340px; max-width: 100%;
   display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.35);
 }
 .login-card label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: var(--texto-secundario); }
@@ -55,25 +61,26 @@ body {
 .painel { display: flex; min-height: 100vh; }
 
 .sidebar {
-  width: 230px; background: var(--surface); border-right: 1px solid var(--borda);
+  width: 230px; background: rgba(0,0,0,0.18); border-right: 1px solid rgba(255,255,255,0.08);
   display: flex; flex-direction: column; padding: 20px 14px; gap: 24px; flex-shrink: 0;
 }
+.sidebar .brand { color: var(--texto-sobre-meia-noite); }
 .sidebar nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
 .nav-item {
   text-align: left; padding: 10px 12px; border-radius: 8px; border: none; background: none;
-  font-weight: 600; color: var(--texto-secundario); cursor: pointer; font-size: 14px;
+  font-weight: 600; color: var(--texto-secundario-sobre-meia-noite); cursor: pointer; font-size: 14px;
 }
-.nav-item:hover { background: var(--page); }
+.nav-item:hover { background: rgba(255,255,255,0.08); color: var(--texto-sobre-meia-noite); }
 .nav-item.active { background: var(--azul-claro); color: #184f95; }
 .btn-sair {
-  border: none; background: none; color: var(--vermelho-critical); font-weight: 600; cursor: pointer;
+  border: none; background: none; color: #f28b8b; font-weight: 600; cursor: pointer;
   text-align: left; padding: 10px 12px; font-size: 14px;
 }
 
 .conteudo { flex: 1; padding: 28px 36px; max-width: 1100px; }
 .secao h1 { margin: 0 0 4px; font-size: 24px; }
 .secao h2 { font-size: 16px; margin: 24px 0 12px; }
-.subtitulo { color: var(--texto-secundario); font-size: 14px; margin-top: 4px; }
+.subtitulo { color: var(--texto-secundario-sobre-meia-noite); font-size: 14px; margin-top: 4px; }
 
 .secao-cabecalho { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
 
@@ -84,16 +91,21 @@ body {
 
 .link-btn { background: none; border: none; color: var(--azul); font-weight: 600; cursor: pointer; font-size: 13px; }
 
+/* Links soltos direto no fundo escuro (fora de cartoes/modais brancos)
+   precisam do azul mais claro pra continuar legiveis. */
+#btn-preset-5, #btn-add-carro { color: var(--azul-sobre-meia-noite); }
+
 /* ---------- CARDS / TILES ---------- */
 .cartao {
-  background: var(--surface); border: 1px solid var(--borda); border-radius: 14px; padding: 20px; margin-bottom: 18px;
+  background: var(--surface); color: var(--texto); border: 1px solid var(--borda); border-radius: 14px;
+  padding: 20px; margin-bottom: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
 .grid-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
 .grid-tiles.tres { grid-template-columns: repeat(3, 1fr); }
 .stat-tile {
-  background: var(--surface); border: 1px solid var(--borda); border-radius: 14px; padding: 16px 18px;
-  display: flex; flex-direction: column; gap: 6px;
+  background: var(--surface); color: var(--texto); border: 1px solid var(--borda); border-radius: 14px; padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 .stat-label { font-size: 12px; color: var(--texto-mudo); font-weight: 600; }
 .stat-valor { font-size: 26px; font-weight: 700; font-variant-numeric: proportional-nums; }
@@ -122,8 +134,8 @@ body {
 .vaga.offline { background: var(--texto-mudo); }
 
 /* ---------- CONSUMO / GRAFICO ---------- */
-.periodo-seletor { display: flex; gap: 6px; background: var(--page); padding: 4px; border-radius: 10px; }
-.periodo-btn { border: none; background: none; padding: 7px 14px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: var(--texto-secundario); }
+.periodo-seletor { display: flex; gap: 6px; background: rgba(255,255,255,0.08); padding: 4px; border-radius: 10px; }
+.periodo-btn { border: none; background: none; padding: 7px 14px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: var(--texto-secundario-sobre-meia-noite); }
 .periodo-btn.active { background: var(--surface); color: var(--azul); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
 .chart-card { padding: 20px 20px 8px; }
 
@@ -131,8 +143,11 @@ body {
 .tabela-simulacao { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
 .tabela-simulacao th { text-align: left; font-size: 12px; color: var(--texto-mudo); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--gridline); }
 .tabela-simulacao td { padding: 6px 8px; border-bottom: 1px solid var(--gridline); }
-.tabela-simulacao input { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--gridline); font-size: 13px; }
-.remover-carro { background: none; border: none; color: var(--vermelho-critical); cursor: pointer; font-weight: 700; }
+.tabela-simulacao input {
+  width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--gridline); font-size: 13px;
+  background: var(--surface); color: var(--texto);
+}
+.remover-carro { background: none; border: none; color: #f28b8b; cursor: pointer; font-weight: 700; }
 .acoes-simulacao { margin: 16px 0; }
 .acoes-simulacao .btn-primary { width: auto; padding: 12px 24px; }
 
@@ -177,7 +192,7 @@ body {
   display: flex; align-items: center; justify-content: center; padding: 20px;
 }
 .modal-card {
-  background: var(--surface); border-radius: 14px; padding: 24px; width: 100%; max-width: 380px;
+  background: var(--surface); color: var(--texto); border-radius: 14px; padding: 24px; width: 100%; max-width: 380px;
   box-shadow: 0 20px 60px rgba(0,0,0,.3);
 }
 .modal-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
