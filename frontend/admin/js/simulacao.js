@@ -50,7 +50,7 @@ document.getElementById("btn-simular").addEventListener("click", async () => {
 function renderizarResultadoSimulacao(resultado) {
   document.getElementById("sim-resultado").classList.remove("hidden");
   document.getElementById("sim-disponivel-texto").textContent =
-    `${resultado.potencia_disponivel_kw} kW${resultado.horario_pico ? " (reduzida por horario de pico)" : ""}`;
+    `${resultado.potencia_disponivel_kw} kW${resultado.horario_pico ? " (reduzida por horário de pico)" : ""}`;
 
   const container = document.getElementById("sim-barras");
   const maiorPotencia = Math.max(...resultado.carros.map((c) => c.potencia_solicitada_kw), 1);
@@ -61,7 +61,7 @@ function renderizarResultadoSimulacao(resultado) {
       return `
       <div class="sim-barra-item">
         <div class="topo">
-          <span>${c.nome} <span class="prioridade-badge prioridade-${c.prioridade}">${c.prioridade}</span></span>
+          <span>${c.nome} <span class="prioridade-badge prioridade-${c.prioridade}">${rotuloPrioridade(c.prioridade).toUpperCase()}</span></span>
           <span>${c.potencia_alocada_kw} / ${c.potencia_solicitada_kw} kW</span>
         </div>
         <div class="trilho"><div class="fill fill-${c.prioridade}" style="width:${percentual}%"></div></div>

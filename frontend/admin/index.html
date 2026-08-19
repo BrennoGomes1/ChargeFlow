@@ -29,10 +29,10 @@
     <aside class="sidebar">
       <div class="brand"><span class="brand-dot"></span>ChargeFlow</div>
       <nav>
-        <button class="nav-item active" data-secao="visao-geral">Visao geral</button>
+        <button class="nav-item active" data-secao="visao-geral">Visão geral</button>
         <button class="nav-item" data-secao="consumo">Consumo</button>
         <button class="nav-item" data-secao="sustentabilidade">Sustentabilidade</button>
-        <button class="nav-item" data-secao="simulacao">Simular cenario</button>
+        <button class="nav-item" data-secao="simulacao">Simular cenário</button>
         <button class="nav-item" data-secao="ranking">Ranking</button>
       </nav>
       <button id="btn-sair" class="btn-sair">Sair</button>
@@ -47,13 +47,13 @@
       <!-- VISAO GERAL -->
       <section id="secao-visao-geral" class="secao">
         <div class="secao-cabecalho">
-          <h1>Visao geral</h1>
-          <span id="vg-pico-tag" class="tag hidden">horario de pico (-20% potencia)</span>
+          <h1>Visão geral</h1>
+          <span id="vg-pico-tag" class="tag hidden">horário de pico (-20% potência)</span>
         </div>
 
         <div class="cartao potencia-card">
           <div class="potencia-topo">
-            <span class="potencia-label">Potencia do predio</span>
+            <span class="potencia-label">Potência do prédio</span>
             <span id="vg-potencia-valores" class="potencia-valores">0 / 0 kW</span>
           </div>
           <div class="meter">
@@ -62,9 +62,9 @@
         </div>
 
         <div class="grid-tiles">
-          <div class="stat-tile"><span class="stat-label">Estacoes disponiveis</span><span id="vg-disponiveis" class="stat-valor good">0</span></div>
-          <div class="stat-tile"><span class="stat-label">Estacoes ocupadas</span><span id="vg-ocupadas" class="stat-valor">0</span></div>
-          <div class="stat-tile"><span class="stat-label">Em manutencao/offline</span><span id="vg-indisponiveis" class="stat-valor muted">0</span></div>
+          <div class="stat-tile"><span class="stat-label">Estações disponíveis</span><span id="vg-disponiveis" class="stat-valor good">0</span></div>
+          <div class="stat-tile"><span class="stat-label">Estações ocupadas</span><span id="vg-ocupadas" class="stat-valor">0</span></div>
+          <div class="stat-tile"><span class="stat-label">Em manutenção/offline</span><span id="vg-indisponiveis" class="stat-valor muted">0</span></div>
         </div>
 
         <h2>Mapa de vagas</h2>
@@ -78,7 +78,7 @@
           <div class="periodo-seletor">
             <button class="periodo-btn active" data-periodo="dia">Dia</button>
             <button class="periodo-btn" data-periodo="semana">Semana</button>
-            <button class="periodo-btn" data-periodo="mes">Mes</button>
+            <button class="periodo-btn" data-periodo="mes">Mês</button>
           </div>
         </div>
         <div class="grid-tiles">
@@ -100,7 +100,7 @@
         </div>
         <div class="cartao">
           <div class="potencia-topo">
-            <span class="potencia-label">% de energia renovavel (solar)</span>
+            <span class="potencia-label">% de energia renovável (solar)</span>
             <span id="sus-percentual-texto" class="potencia-valores">0%</span>
           </div>
           <div class="meter">
@@ -112,26 +112,26 @@
       <!-- SIMULACAO -->
       <section id="secao-simulacao" class="secao hidden">
         <div class="secao-cabecalho">
-          <h1>Simular cenario</h1>
+          <h1>Simular cenário</h1>
           <button id="btn-preset-5" class="link-btn">gerar 5 carros de exemplo</button>
         </div>
-        <p class="subtitulo">Simule varios carros chegando ao mesmo tempo e veja o algoritmo de distribuicao de potencia decidir quem recebe mais.</p>
+        <p class="subtitulo">Simule vários carros chegando ao mesmo tempo e veja o algoritmo de distribuição de potência decidir quem recebe mais.</p>
 
         <table class="tabela-simulacao">
           <thead>
-            <tr><th>Nome</th><th>Bateria (%)</th><th>Potencia solicitada (kW)</th><th></th></tr>
+            <tr><th>Nome</th><th>Bateria (%)</th><th>Potência solicitada (kW)</th><th></th></tr>
           </thead>
           <tbody id="sim-linhas"></tbody>
         </table>
         <button id="btn-add-carro" class="link-btn">+ adicionar carro</button>
 
         <div class="acoes-simulacao">
-          <button id="btn-simular" class="btn-primary">Simular cenario</button>
+          <button id="btn-simular" class="btn-primary">Simular cenário</button>
         </div>
 
         <div id="sim-resultado" class="cartao hidden">
           <div class="potencia-topo">
-            <span class="potencia-label">Potencia disponivel para os carros simulados</span>
+            <span class="potencia-label">Potência disponível para os carros simulados</span>
             <span id="sim-disponivel-texto" class="potencia-valores">0 kW</span>
           </div>
           <div id="sim-barras" class="sim-barras"></div>
@@ -152,7 +152,7 @@
     <div id="modal-vaga" class="modal-overlay hidden">
       <div class="modal-card">
         <div class="modal-topo">
-          <h2 id="modal-vaga-titulo">Estacao</h2>
+          <h2 id="modal-vaga-titulo">Estação</h2>
           <button id="btn-fechar-modal-vaga" class="link-btn">fechar</button>
         </div>
         <div id="modal-vaga-conteudo"></div>

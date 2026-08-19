@@ -18,17 +18,17 @@ def liberar_entrada(usuario: Usuario = Depends(obter_usuario_atual), db: Session
     if estacao:
         return EntradaOut(
             liberado=True,
-            mensagem=f"Cancela liberada. Va para {estacao.nome} - {estacao.localizacao}",
+            mensagem=f"Cancela liberada. Vá para {estacao.nome} - {estacao.localizacao}",
             estacao_sugerida=estacao.nome,
         )
 
     return EntradaOut(
         liberado=True,
-        mensagem="Cancela liberada, mas todas as estacoes estao ocupadas no momento. Entre na fila pelo app.",
+        mensagem="Cancela liberada, mas todas as estações estão ocupadas no momento. Entre na fila pelo app.",
         estacao_sugerida=None,
     )
 
 
 @router.post("/saida", response_model=SaidaOut)
 def liberar_saida(usuario: Usuario = Depends(obter_usuario_atual)):
-    return SaidaOut(liberado=True, mensagem="Cancela de saida liberada. Ate a proxima!")
+    return SaidaOut(liberado=True, mensagem="Cancela de saída liberada. Até a próxima!")

@@ -40,7 +40,7 @@ def obter_usuario_atual(
 ) -> Usuario:
     excecao_credenciais = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Nao foi possivel validar as credenciais",
+        detail="Não foi possível validar as credenciais",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:

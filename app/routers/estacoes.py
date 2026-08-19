@@ -19,7 +19,7 @@ router = APIRouter(prefix="/api/estacoes", tags=["Estacoes"])
 def _config(db: Session) -> ConfigPredio:
     config = db.query(ConfigPredio).first()
     if not config:
-        raise HTTPException(status_code=500, detail="Configuracao do predio nao encontrada")
+        raise HTTPException(status_code=500, detail="Configuração do prédio não encontrada")
     return config
 
 
@@ -59,7 +59,7 @@ def sessao_da_estacao(
     )
     if not sessao:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Nenhuma recarga em andamento nessa estacao"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Nenhuma recarga em andamento nessa estação"
         )
 
     config = _config(db)

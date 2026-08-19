@@ -10,7 +10,7 @@ load_dotenv()
 
 app = FastAPI(
     title="ChargeFlow API",
-    description="Sistema de recarga inteligente para veiculos eletricos em predios comerciais",
+    description="Sistema de recarga inteligente para veículos elétricos em prédios comerciais",
     version="1.0.0",
 )
 

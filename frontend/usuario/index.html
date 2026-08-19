@@ -27,7 +27,7 @@
 
         <form id="form-login" class="form">
           <label>Email
-            <input type="email" id="login-email" required placeholder="voce@empresa.com" />
+            <input type="email" id="login-email" required placeholder="você@empresa.com" />
           </label>
           <label>Senha
             <input type="password" id="login-senha" required placeholder="********" />
@@ -41,10 +41,10 @@
             <input type="text" id="reg-nome" required placeholder="Seu nome" />
           </label>
           <label>Email
-            <input type="email" id="reg-email" required placeholder="voce@empresa.com" />
+            <input type="email" id="reg-email" required placeholder="você@empresa.com" />
           </label>
           <label>Senha
-            <input type="password" id="reg-senha" required minlength="6" placeholder="minimo 6 caracteres" />
+            <input type="password" id="reg-senha" required minlength="6" placeholder="mínimo 6 caracteres" />
           </label>
           <label>Empresa
             <input type="text" id="reg-empresa" placeholder="Opcional" />
@@ -59,8 +59,8 @@
 
       <!-- TELA: CADASTRO DE VEICULO (primeiro uso) -->
       <section id="tela-veiculo" class="tela hidden">
-        <h2>Cadastre seu veiculo</h2>
-        <p class="subtitulo">Antes de carregar, precisamos saber qual carro voce dirige.</p>
+        <h2>Cadastre seu veículo</h2>
+        <p class="subtitulo">Antes de carregar, precisamos saber qual carro você dirige.</p>
         <form id="form-veiculo" class="form">
           <label>Placa
             <input type="text" id="v-placa" required placeholder="ABC1D23" />
@@ -77,11 +77,11 @@
           <label>Bateria atual (%)
             <input type="number" id="v-bateria" required min="0" max="100" step="1" value="50" />
           </label>
-          <label>Carregar ate (%)
+          <label>Carregar até (%)
             <input type="number" id="v-limite-percent" min="1" max="100" step="1" value="80" />
           </label>
           <p class="erro" id="v-erro"></p>
-          <button type="submit" class="btn-primary">Salvar veiculo</button>
+          <button type="submit" class="btn-primary">Salvar veículo</button>
         </form>
         <button id="btn-cancelar-veiculo" class="link-btn hidden">cancelar</button>
       </section>
@@ -99,8 +99,8 @@
 
         <div class="card resumo-predio">
           <div class="resumo-linha">
-            <span>Potencia do predio</span>
-            <span id="home-pico-tag" class="tag hidden">horario de pico</span>
+            <span>Potência do prédio</span>
+            <span id="home-pico-tag" class="tag hidden">horário de pico</span>
           </div>
           <div class="barra-potencia">
             <div id="home-barra-fill" class="barra-potencia-fill"></div>
@@ -112,13 +112,13 @@
         </div>
 
         <div class="secao-titulo">
-          <h2>Seu veiculo</h2>
-          <button id="btn-trocar-veiculo" class="link-btn">+ novo veiculo</button>
+          <h2>Seu veículo</h2>
+          <button id="btn-trocar-veiculo" class="link-btn">+ novo veículo</button>
         </div>
         <div id="home-veiculo-card" class="card veiculo-card"></div>
 
         <div class="secao-titulo">
-          <h2>Estacoes disponiveis</h2>
+          <h2>Estações disponíveis</h2>
           <button id="btn-atualizar-estacoes" class="link-btn">atualizar</button>
         </div>
         <div id="lista-estacoes" class="lista-estacoes"></div>
@@ -138,7 +138,7 @@
           <p class="subtitulo sem-margem" id="pref-estimativa-texto"></p>
         </div>
         <form id="form-preferencias" class="form">
-          <label>Carregar ate (%)
+          <label>Carregar até (%)
             <input type="number" id="pref-limite-percent" min="1" max="100" step="1" />
           </label>
           <p class="dica">A recarga usa seu saldo automaticamente e para sozinha se o saldo acabar antes de chegar nesse %.</p>
@@ -176,20 +176,20 @@
             <span id="sessao-bateria-texto">0%</span>
           </div>
           <div class="grid-status">
-            <div><span class="label">Potencia alocada</span><span id="sessao-potencia" class="valor">0 kW</span></div>
+            <div><span class="label">Potência alocada</span><span id="sessao-potencia" class="valor">0 kW</span></div>
             <div><span class="label">kWh consumido</span><span id="sessao-kwh" class="valor">0</span></div>
             <div><span class="label">Custo atual</span><span id="sessao-custo" class="valor">R$ 0,00</span></div>
             <div><span class="label">Tempo restante</span><span id="sessao-tempo" class="valor">--</span></div>
           </div>
         </div>
-        <button id="btn-parar-sessao" class="btn-secundario">Liberar saida / Parar recarga</button>
+        <button id="btn-parar-sessao" class="btn-secundario">Liberar saída / Parar recarga</button>
       </section>
 
       <!-- TELA: FILA DE ESPERA -->
       <section id="tela-fila" class="tela hidden">
         <h2>Fila de espera</h2>
         <div class="card fila-card">
-          <p>Posicao na fila</p>
+          <p>Posição na fila</p>
           <div class="fila-posicao" id="fila-posicao">-</div>
           <p><span id="fila-prioridade" class="tag"></span></p>
           <p id="fila-previsao" class="subtitulo"></p>
@@ -199,33 +199,33 @@
 
       <!-- TELA: HISTORICO -->
       <section id="tela-historico" class="tela hidden">
-        <h2>Historico</h2>
+        <h2>Histórico</h2>
         <div id="lista-historico" class="lista-historico"></div>
       </section>
 
     </main>
 
     <nav id="bottom-nav" class="bottom-nav hidden">
-      <button data-nav="home" class="nav-btn active">Inicio</button>
+      <button data-nav="home" class="nav-btn active">Início</button>
       <button id="nav-btn-sessao" data-nav="sessao" class="nav-btn hidden">
         <span class="nav-dot"></span>Carregando
       </button>
-      <button data-nav="historico" class="nav-btn">Historico</button>
+      <button data-nav="historico" class="nav-btn">Histórico</button>
     </nav>
 
     <!-- MODAL: DETALHES DA ESTACAO -->
     <div id="modal-estacao" class="modal-overlay hidden">
       <div class="modal-card">
         <div class="modal-topo">
-          <h2 id="modal-estacao-nome">Estacao</h2>
+          <h2 id="modal-estacao-nome">Estação</h2>
           <button id="btn-fechar-modal-estacao" class="link-btn">fechar</button>
         </div>
         <p class="subtitulo sem-margem" id="modal-estacao-local"></p>
         <div class="grid-status" style="margin-top:14px">
           <div><span class="label">Status</span><span id="modal-estacao-status" class="valor">-</span></div>
-          <div><span class="label">Potencia em uso</span><span id="modal-estacao-potencia" class="valor">-</span></div>
+          <div><span class="label">Potência em uso</span><span id="modal-estacao-potencia" class="valor">-</span></div>
         </div>
-        <p class="dica" style="margin-top:14px">Por privacidade, nao mostramos dados de quem esta carregando (bateria, custo ou tempo restante).</p>
+        <p class="dica" style="margin-top:14px">Por privacidade, não mostramos dados de quem está carregando (bateria, custo ou tempo restante).</p>
       </div>
     </div>
   </div>

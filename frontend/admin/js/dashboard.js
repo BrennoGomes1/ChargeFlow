@@ -38,7 +38,7 @@ async function carregarVisaoGeral() {
     });
   } catch (err) {
     console.error(err);
-    mostrarErroGeral("Nao foi possivel carregar a visao geral. " + err.message, carregarVisaoGeral);
+    mostrarErroGeral("Não foi possível carregar a visão geral. " + err.message, carregarVisaoGeral);
   }
 }
 
@@ -54,13 +54,13 @@ async function mostrarDetalhesVaga(estacaoId) {
     document.getElementById("modal-vaga-titulo").textContent = s.estacao_nome;
     const prioridadeClasse = `prioridade-${s.prioridade}`;
     conteudo.innerHTML = `
-      <div class="vaga-detalhe-linha"><span class="rotulo">Usuario</span><span class="valor">${s.usuario_nome}${s.usuario_empresa ? ` (${s.usuario_empresa})` : ""}</span></div>
-      <div class="vaga-detalhe-linha"><span class="rotulo">Veiculo</span><span class="valor">${s.veiculo_placa} - ${s.veiculo_marca ? s.veiculo_marca + " " : ""}${s.veiculo_modelo}</span></div>
-      <div class="vaga-detalhe-linha"><span class="rotulo">Bateria atual</span><span class="valor">${s.bateria_atual_percent}% <span class="prioridade-badge ${prioridadeClasse}">${s.prioridade}</span></span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Usuário</span><span class="valor">${s.usuario_nome}${s.usuario_empresa ? ` (${s.usuario_empresa})` : ""}</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Veículo</span><span class="valor">${s.veiculo_placa} - ${s.veiculo_marca ? s.veiculo_marca + " " : ""}${s.veiculo_modelo}</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Bateria atual</span><span class="valor">${s.bateria_atual_percent}% <span class="prioridade-badge ${prioridadeClasse}">${rotuloPrioridade(s.prioridade).toUpperCase()}</span></span></div>
       <div class="vaga-detalhe-linha"><span class="rotulo">Meta da recarga</span><span class="valor">${s.limite_percent}%</span></div>
-      <div class="vaga-detalhe-linha"><span class="rotulo">Potencia alocada</span><span class="valor">${s.potencia_alocada_kw} kW</span></div>
-      <div class="vaga-detalhe-linha"><span class="rotulo">kWh ate agora</span><span class="valor">${s.kwh_consumido}</span></div>
-      <div class="vaga-detalhe-linha"><span class="rotulo">Custo ate agora</span><span class="valor">${formatarMoeda(s.custo_total)}</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Potência alocada</span><span class="valor">${s.potencia_alocada_kw} kW</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">kWh até agora</span><span class="valor">${s.kwh_consumido}</span></div>
+      <div class="vaga-detalhe-linha"><span class="rotulo">Custo até agora</span><span class="valor">${formatarMoeda(s.custo_total)}</span></div>
       <div class="vaga-detalhe-linha"><span class="rotulo">Tempo decorrido</span><span class="valor">${Math.round(s.tempo_decorrido_min)} min</span></div>
     `;
   } catch (err) {
@@ -125,7 +125,7 @@ async function carregarConsumo() {
     });
   } catch (err) {
     console.error(err);
-    mostrarErroGeral("Nao foi possivel carregar o consumo. " + err.message, carregarConsumo);
+    mostrarErroGeral("Não foi possível carregar o consumo. " + err.message, carregarConsumo);
   }
 }
 
@@ -139,7 +139,7 @@ async function carregarSustentabilidade() {
     document.getElementById("sus-percentual-fill").style.width = `${Math.min(s.percentual_renovavel, 100)}%`;
   } catch (err) {
     console.error(err);
-    mostrarErroGeral("Nao foi possivel carregar a sustentabilidade. " + err.message, carregarSustentabilidade);
+    mostrarErroGeral("Não foi possível carregar a sustentabilidade. " + err.message, carregarSustentabilidade);
   }
 }
 
@@ -167,6 +167,6 @@ async function carregarRanking() {
       .join("");
   } catch (err) {
     console.error(err);
-    mostrarErroGeral("Nao foi possivel carregar o ranking. " + err.message, carregarRanking);
+    mostrarErroGeral("Não foi possível carregar o ranking. " + err.message, carregarRanking);
   }
 }

@@ -12,7 +12,7 @@ router = APIRouter(prefix="/api/auth", tags=["Autenticacao"])
 @router.post("/registrar", response_model=Token, status_code=status.HTTP_201_CREATED)
 def registrar(dados: UsuarioRegistrar, db: Session = Depends(get_db)):
     if db.query(Usuario).filter(Usuario.email == dados.email).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email ja cadastrado")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email já cadastrado")
 
     usuario = Usuario(
         nome=dados.nome,
@@ -33,7 +33,7 @@ def registrar(dados: UsuarioRegistrar, db: Session = Depends(get_db)):
 def login(dados: UsuarioLogin, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.email == dados.email).first()
     if not usuario or not verificar_senha(dados.senha, usuario.senha_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Email ou senha invalidos")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Email ou senha inválidos")
 
     token = criar_token_acesso(usuario.id)
     return Token(access_token=token, usuario=UsuarioOut.model_validate(usuario))

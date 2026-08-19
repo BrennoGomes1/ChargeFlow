@@ -53,6 +53,10 @@ function formatarKwh(valor) {
   return `${Number(valor).toFixed(1)} kWh`;
 }
 
+function rotuloPrioridade(p) {
+  return { ALTA: "Alta", MEDIA: "Média", BAIXA: "Baixa" }[p] || p;
+}
+
 document.getElementById("form-login").addEventListener("submit", async (e) => {
   e.preventDefault();
   const erroEl = document.getElementById("login-erro");

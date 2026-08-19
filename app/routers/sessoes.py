@@ -23,7 +23,7 @@ router = APIRouter(prefix="/api/sessoes", tags=["Sessoes de carregamento"])
 def _config(db: Session) -> ConfigPredio:
     config = db.query(ConfigPredio).first()
     if not config:
-        raise HTTPException(status_code=500, detail="Configuracao do predio nao encontrada")
+        raise HTTPException(status_code=500, detail="Configuração do prédio não encontrada")
     return config
 
 
@@ -132,7 +132,7 @@ def _finalizar_sessao(db: Session, sessao: Sessao, config: ConfigPredio, agora: 
                 valor=float(sessao.custo_total),
                 saldo_apos=usuario.saldo,
                 sessao_id=sessao.id,
-                descricao=f"Recarga do veiculo {veiculo.placa}",
+                descricao=f"Recarga do veículo {veiculo.placa}",
             )
         )
 
@@ -150,13 +150,13 @@ def iniciar_sessao(
 ):
     veiculo = db.get(Veiculo, dados.veiculo_id)
     if not veiculo or veiculo.usuario_id != usuario.id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Veiculo nao encontrado")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Veículo não encontrado")
 
     estacao = db.get(Estacao, dados.estacao_id)
     if not estacao:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Estacao nao encontrada")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Estação não encontrada")
     if estacao.status != "disponivel":
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Estacao nao esta disponivel")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Estação não está disponível")
 
     sessao_ativa = (
         db.query(Sessao)
@@ -164,7 +164,7 @@ def iniciar_sessao(
         .first()
     )
     if sessao_ativa:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Este veiculo ja possui uma recarga em andamento")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Este veículo já possui uma recarga em andamento")
 
     saldo_disponivel = float(usuario.saldo)
     if saldo_disponivel <= 0:
@@ -206,7 +206,7 @@ def iniciar_sessao(
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Sem potencia disponivel no predio neste momento. Entre na fila de espera.",
+            detail="Sem potência disponível no prédio neste momento. Entre na fila de espera.",
         )
 
     db.commit()
@@ -222,9 +222,9 @@ def parar_sessao(
 ):
     sessao = db.get(Sessao, sessao_id)
     if not sessao or (sessao.usuario_id != usuario.id and usuario.role != "admin"):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sessao nao encontrada")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sessão não encontrada")
     if sessao.status != "carregando":
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Sessao ja finalizada")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Sessão já finalizada")
 
     config = _config(db)
     sessao = _finalizar_sessao(db, sessao, config, datetime.now())
@@ -255,7 +255,7 @@ def status_sessao(
 ):
     sessao = db.get(Sessao, sessao_id)
     if not sessao or (sessao.usuario_id != usuario.id and usuario.role != "admin"):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sessao nao encontrada")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sessão não encontrada")
 
     veiculo = sessao.veiculo
     agora = datetime.now()

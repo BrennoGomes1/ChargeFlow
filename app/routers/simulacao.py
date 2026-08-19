@@ -29,7 +29,7 @@ router = APIRouter(prefix="/api/simulacao", tags=["Simulacao"])
 def _config(db: Session) -> ConfigPredio:
     config = db.query(ConfigPredio).first()
     if not config:
-        raise HTTPException(status_code=500, detail="Configuracao do predio nao encontrada")
+        raise HTTPException(status_code=500, detail="Configuração do prédio não encontrada")
     return config
 
 

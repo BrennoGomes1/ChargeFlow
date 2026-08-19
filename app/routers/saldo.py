@@ -24,7 +24,7 @@ router = APIRouter(prefix="/api/saldo", tags=["Saldo"])
 def _config(db: Session) -> ConfigPredio:
     config = db.query(ConfigPredio).first()
     if not config:
-        raise HTTPException(status_code=500, detail="Configuracao do predio nao encontrada")
+        raise HTTPException(status_code=500, detail="Configuração do prédio não encontrada")
     return config
 
 
@@ -62,7 +62,7 @@ def estimativa_saldo(
 ):
     veiculo = db.get(Veiculo, veiculo_id)
     if not veiculo or veiculo.usuario_id != usuario.id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Veiculo nao encontrado")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Veículo não encontrado")
 
     config = _config(db)
     agora = datetime.now()

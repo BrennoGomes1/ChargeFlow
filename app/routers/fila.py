@@ -21,7 +21,7 @@ def entrar_na_fila(
 ):
     veiculo = db.get(Veiculo, dados.veiculo_id)
     if not veiculo or veiculo.usuario_id != usuario.id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Veiculo nao encontrado")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Veículo não encontrado")
 
     ja_carregando = (
         db.query(Sessao)
@@ -29,7 +29,7 @@ def entrar_na_fila(
         .first()
     )
     if ja_carregando:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Este veiculo ja esta carregando")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Este veículo já está carregando")
 
     ja_na_fila = (
         db.query(FilaEspera)
@@ -37,7 +37,7 @@ def entrar_na_fila(
         .first()
     )
     if ja_na_fila:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Este veiculo ja esta na fila")
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Este veículo já está na fila")
 
     prioridade = fila_service.prioridade_para_fila(float(veiculo.bateria_atual_percent))
     item = FilaEspera(usuario_id=usuario.id, veiculo_id=veiculo.id, prioridade=prioridade, posicao_fila=0)
@@ -63,7 +63,7 @@ def posicao_na_fila(usuario: Usuario = Depends(obter_usuario_atual), db: Session
         .first()
     )
     if not item:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Voce nao esta na fila")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Você não está na fila")
 
     return FilaPosicaoOut(
         posicao_fila=item.posicao_fila,

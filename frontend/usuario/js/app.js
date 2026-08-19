@@ -71,6 +71,10 @@ function formatarMoeda(valor) {
   return `R$ ${Number(valor).toFixed(2).replace(".", ",")}`;
 }
 
+function rotuloPrioridade(p) {
+  return { ALTA: "Alta", MEDIA: "Média", BAIXA: "Baixa" }[p] || p;
+}
+
 // ---------------- AUTENTICACAO ----------------
 
 document.querySelectorAll(".tab-btn").forEach((btn) => {
@@ -187,7 +191,7 @@ document.getElementById("form-veiculo").addEventListener("submit", async (e) => 
 function renderVeiculoCard() {
   const container = document.getElementById("home-veiculo-card");
   if (!state.veiculoAtual) {
-    container.innerHTML = `<p class="vazio">Nenhum veiculo cadastrado</p>`;
+    container.innerHTML = `<p class="vazio">Nenhum veículo cadastrado</p>`;
     return;
   }
   const v = state.veiculoAtual;
@@ -235,7 +239,7 @@ async function carregarEstimativaHome() {
   try {
     const est = await api(`/api/saldo/estimativa/${state.veiculoAtual.id}`);
     elTexto.textContent =
-      `Com esse saldo, da pra carregar o ${state.veiculoAtual.modelo} ate ${est.percentual_maximo_alcancavel.toFixed(0)}%`;
+      `Com esse saldo, dá pra carregar o ${state.veiculoAtual.modelo} até ${est.percentual_maximo_alcancavel.toFixed(0)}%`;
   } catch (err) {
     elTexto.textContent = "";
   }
@@ -285,7 +289,7 @@ async function carregarEstacoes() {
   const estacoes = await api("/api/estacoes");
   const container = document.getElementById("lista-estacoes");
   if (estacoes.length === 0) {
-    container.innerHTML = `<p class="vazio">Nenhuma estacao cadastrada</p>`;
+    container.innerHTML = `<p class="vazio">Nenhuma estação cadastrada</p>`;
     return;
   }
   container.innerHTML = estacoes
@@ -356,11 +360,11 @@ document.getElementById("btn-liberar-entrada").addEventListener("click", async (
 
 async function selecionarEstacao(estacao) {
   if (!state.veiculoAtual) {
-    alert("Cadastre um veiculo primeiro.");
+    alert("Cadastre um veículo primeiro.");
     return;
   }
   if (state.saldoAtual <= 0) {
-    alert("Seu saldo esta zerado. Recarregue seu saldo antes de iniciar uma recarga.");
+    alert("Seu saldo está zerado. Recarregue seu saldo antes de iniciar uma recarga.");
     return;
   }
   state.estacaoSelecionada = estacao;
@@ -374,7 +378,7 @@ async function selecionarEstacao(estacao) {
   try {
     const est = await api(`/api/saldo/estimativa/${state.veiculoAtual.id}`);
     document.getElementById("pref-estimativa-texto").textContent =
-      `Com esse saldo voce chega a ${est.percentual_maximo_alcancavel.toFixed(0)}% de bateria.`;
+      `Com esse saldo você chega a ${est.percentual_maximo_alcancavel.toFixed(0)}% de bateria.`;
   } catch (err) { /* estimativa e so um complemento, ignora falha */ }
 }
 
@@ -481,15 +485,15 @@ async function entrarFila() {
 
 function atualizarUIFila(f) {
   document.getElementById("fila-posicao").textContent = f.posicao_fila;
-  document.getElementById("fila-prioridade").textContent = `prioridade ${f.prioridade.toLowerCase()}`;
+  document.getElementById("fila-prioridade").textContent = `prioridade ${rotuloPrioridade(f.prioridade).toLowerCase()}`;
   document.getElementById("fila-previsao").textContent =
     f.pessoas_a_frente > 0
-      ? `${f.pessoas_a_frente} na sua frente - previsao de ${f.previsao_espera_min} min`
-      : "voce e o proximo!";
+      ? `${f.pessoas_a_frente} na sua frente - previsão de ${f.previsao_espera_min} min`
+      : "você é o próximo!";
 
   if (f.status === "notificada") {
     clearInterval(state.pollFilaTimer);
-    alert("Uma estacao esta disponivel para voce! Voce tem 10 minutos para ocupar. Escolha a estacao na tela inicial.");
+    alert("Uma estação está disponível para você! Você tem 10 minutos para ocupar. Escolha a estação na tela inicial.");
     mostrar("home");
     loadHome();
   }
@@ -526,7 +530,7 @@ async function carregarHistorico() {
   const lista = await api("/api/sessoes/historico");
   const container = document.getElementById("lista-historico");
   if (lista.length === 0) {
-    container.innerHTML = `<p class="vazio">Nenhuma sessao ainda</p>`;
+    container.innerHTML = `<p class="vazio">Nenhuma sessão ainda</p>`;
     return;
   }
   container.innerHTML = lista

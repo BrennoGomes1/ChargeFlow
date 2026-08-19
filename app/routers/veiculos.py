@@ -29,7 +29,7 @@ def cadastrar_veiculo(
         .first()
     )
     if ja_existe:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Veiculo com essa placa ja cadastrado")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Veículo com essa placa já cadastrado")
 
     veiculo = Veiculo(usuario_id=usuario.id, **dados.model_dump())
     db.add(veiculo)
