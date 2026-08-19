@@ -104,7 +104,7 @@ async function carregarConsumo() {
           {
             label: "kWh consumido",
             data: valores,
-            backgroundColor: "#2a78d6",
+            backgroundColor: "#3b82f6",
             borderRadius: 4,
             barThickness: 22,
           },
@@ -114,11 +114,11 @@ async function carregarConsumo() {
         responsive: true,
         plugins: { legend: { display: false } },
         scales: {
-          x: { grid: { display: false }, ticks: { color: "#898781" } },
+          x: { grid: { display: false }, ticks: { color: "#94a3b8" } },
           y: {
             beginAtZero: true,
-            grid: { color: "#e1e0d9" },
-            ticks: { color: "#898781" },
+            grid: { color: "rgba(255,255,255,0.08)" },
+            ticks: { color: "#94a3b8" },
           },
         },
       },
