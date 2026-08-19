@@ -34,12 +34,12 @@ INSERT INTO veiculos (usuario_id, placa, modelo, marca, capacidade_bateria_kwh, 
 -- estacoes
 -- =========================================================
 INSERT INTO estacoes (nome, potencia_max_kw, potencia_atual_kw, status, localizacao) VALUES
-('Estacao A1', 50.00, 0, 'disponivel', 'Subsolo 1 - Vaga 01'),
-('Estacao A2', 50.00, 0, 'disponivel', 'Subsolo 1 - Vaga 03'),
-('Estacao A3', 50.00, 0, 'disponivel', 'Subsolo 1 - Vaga 05'),
-('Estacao B1', 22.00, 0, 'disponivel', 'Subsolo 2 - Vaga 10'),
-('Estacao B2', 22.00, 0, 'manutencao', 'Subsolo 2 - Vaga 11'),
-('Estacao C1', 11.00, 0, 'disponivel', 'Terreo - Vaga 01');
+('Estação A1', 50.00, 0, 'disponivel', 'Subsolo 1 - Vaga 01'),
+('Estação A2', 50.00, 0, 'disponivel', 'Subsolo 1 - Vaga 03'),
+('Estação A3', 50.00, 0, 'disponivel', 'Subsolo 1 - Vaga 05'),
+('Estação B1', 22.00, 0, 'disponivel', 'Subsolo 2 - Vaga 10'),
+('Estação B2', 22.00, 0, 'manutencao', 'Subsolo 2 - Vaga 11'),
+('Estação C1', 11.00, 0, 'disponivel', 'Térreo - Vaga 01');
 
 -- =========================================================
 -- sessoes (historico de exemplo, ja finalizadas)
@@ -59,10 +59,10 @@ INSERT INTO sessoes (veiculo_id, estacao_id, usuario_id, limite_percent, limite_
 -- =========================================================
 INSERT INTO movimentacoes_saldo (usuario_id, tipo, valor, saldo_apos, sessao_id, descricao, criado_em) VALUES
 (3, 'recarga', 100.00, 100.00, NULL, 'Recarga inicial de saldo', NOW() - INTERVAL '3 days'),
-(3, 'consumo', 13.88,  86.12,  1,    'Recarga do veiculo BRA2E19', NOW() - INTERVAL '2 days' - INTERVAL '2 hours'),
+(3, 'consumo', 13.88,  86.12,  1,    'Recarga do veículo BRA2E19', NOW() - INTERVAL '2 days' - INTERVAL '2 hours'),
 (2, 'recarga', 100.00, 100.00, NULL, 'Recarga inicial de saldo', NOW() - INTERVAL '2 days'),
-(2, 'consumo', 15.00,  85.00,  2,    'Recarga do veiculo ABC1D23', NOW() - INTERVAL '1 days' - INTERVAL '4 hours'),
+(2, 'consumo', 15.00,  85.00,  2,    'Recarga do veículo ABC1D23', NOW() - INTERVAL '1 days' - INTERVAL '4 hours'),
 (4, 'recarga', 100.00, 100.00, NULL, 'Recarga inicial de saldo', NOW() - INTERVAL '1 days'),
-(4, 'consumo', 18.98,  81.02,  3,    'Recarga do veiculo FLA4X56', NOW() - INTERVAL '18 hours'),
+(4, 'consumo', 18.98,  81.02,  3,    'Recarga do veículo FLA4X56', NOW() - INTERVAL '18 hours'),
 (5, 'recarga', 100.00, 100.00, NULL, 'Recarga inicial de saldo', NOW() - INTERVAL '5 days'),
 (6, 'recarga', 100.00, 100.00, NULL, 'Recarga inicial de saldo', NOW() - INTERVAL '5 days');
