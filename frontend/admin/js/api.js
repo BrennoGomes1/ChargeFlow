@@ -110,6 +110,7 @@ function mostrarSecao(secao) {
   document.querySelectorAll(".nav-item").forEach((btn) => btn.classList.toggle("active", btn.dataset.secao === secao));
 
   if (secao === "visao-geral") carregarVisaoGeral();
+  if (secao === "usuarios") carregarUsuarios();
   if (secao === "consumo") carregarConsumo();
   if (secao === "sustentabilidade") carregarSustentabilidade();
   if (secao === "ranking") carregarRanking();

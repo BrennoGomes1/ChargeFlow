@@ -30,6 +30,7 @@
       <div class="brand"><span class="brand-dot"></span>ChargeFlow</div>
       <nav>
         <button class="nav-item active" data-secao="visao-geral">Visão geral</button>
+        <button class="nav-item" data-secao="usuarios">Usuários</button>
         <button class="nav-item" data-secao="consumo">Consumo</button>
         <button class="nav-item" data-secao="sustentabilidade">Sustentabilidade</button>
         <button class="nav-item" data-secao="simulacao">Simular cenário</button>
@@ -69,6 +70,18 @@
 
         <h2>Mapa de vagas</h2>
         <div id="mapa-vagas" class="mapa-vagas"></div>
+      </section>
+
+      <!-- USUARIOS -->
+      <section id="secao-usuarios" class="secao hidden">
+        <h1>Usuários</h1>
+        <div class="grid-tiles" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="stat-tile"><span class="stat-label">Total de usuários cadastrados</span><span id="us-total" class="stat-valor">0</span></div>
+          <div class="stat-tile"><span class="stat-label">Empresas diferentes</span><span id="us-empresas" class="stat-valor">0</span></div>
+        </div>
+        <div class="cartao">
+          <div id="usuarios-lista" class="usuarios-lista"></div>
+        </div>
       </section>
 
       <!-- CONSUMO -->
@@ -163,5 +176,6 @@
   <script src="js/api.js"></script>
   <script src="js/dashboard.js"></script>
   <script src="js/simulacao.js"></script>
+  <script src="js/usuarios.js"></script>
 </body>
 </html>
