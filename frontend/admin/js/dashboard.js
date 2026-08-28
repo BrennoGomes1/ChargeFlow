@@ -221,6 +221,25 @@ document.getElementById("btn-confirmar-premio").addEventListener("click", async 
   }
 });
 
+document.getElementById("btn-confirmar-recarga-gratis").addEventListener("click", async () => {
+  const erroEl = document.getElementById("premio-erro");
+  erroEl.textContent = "";
+  erroEl.style.color = "";
+  try {
+    const resp = await api(`/api/usuarios/${premioUsuarioId}/premiar-recarga-gratis`, {
+      method: "POST",
+    });
+    erroEl.style.color = "var(--verde-good)";
+    erroEl.textContent = `✅ ${resp.mensagem}`;
+    setTimeout(() => {
+      document.getElementById("modal-premio").classList.add("hidden");
+      carregarRanking();
+    }, 2000);
+  } catch (err) {
+    erroEl.textContent = err.message;
+  }
+});
+
 async function carregarHistorico() {
   try {
     const lista = await api("/api/dashboard/historico");
