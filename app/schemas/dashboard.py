@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -22,8 +24,25 @@ class SustentabilidadeOut(BaseModel):
 
 
 class RankingItemOut(BaseModel):
+    usuario_id: int
     nome: str
     empresa: str | None
     kwh_total: float
     custo_total: float
     sessoes: int
+
+
+class HistoricoItemOut(BaseModel):
+    id: int
+    inicio: datetime
+    fim: datetime | None
+    usuario_nome: str
+    usuario_empresa: str | None
+    veiculo_placa: str
+    veiculo_modelo: str
+    estacao_nome: str
+    kwh_consumido: float
+    custo_total: float
+    tarifa_aplicada: float | None
+    kwh_solar: float
+    co2_evitado_kg: float

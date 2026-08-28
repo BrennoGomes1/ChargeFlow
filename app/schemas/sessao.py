@@ -41,6 +41,8 @@ class SessaoStatusOut(BaseModel):
     limite_custo: float | None
     tempo_decorrido_min: float
     tempo_estimado_restante_min: float | None
+    kwh_solar: float | None = None
+    co2_evitado_kg: float | None = None
 
 
 class SessaoFinalizadaOut(BaseModel):

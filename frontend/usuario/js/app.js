@@ -281,7 +281,7 @@ document.getElementById("form-recarga-saldo").addEventListener("submit", async (
 
 async function loadHome() {
   renderVeiculoCard();
-  await Promise.all([carregarEstacoes(), carregarPotencia(), carregarSaldo()]);
+  await Promise.all([carregarEstacoes(), carregarSaldo()]);
   await carregarEstimativaHome();
 }
 
@@ -335,14 +335,6 @@ document.getElementById("btn-fechar-modal-estacao").addEventListener("click", ()
 document.getElementById("modal-estacao").addEventListener("click", (e) => {
   if (e.target.id === "modal-estacao") e.target.classList.add("hidden");
 });
-
-async function carregarPotencia() {
-  const p = await api("/api/estacoes/potencia");
-  document.getElementById("home-potencia-uso").textContent = `${p.potencia_em_uso_kw} kW em uso`;
-  document.getElementById("home-potencia-max").textContent = `/ ${p.potencia_max_total_kw} kW`;
-  document.getElementById("home-barra-fill").style.width = `${Math.min(p.percentual_em_uso, 100)}%`;
-  document.getElementById("home-pico-tag").classList.toggle("hidden", !p.horario_pico);
-}
 
 document.getElementById("btn-atualizar-estacoes").addEventListener("click", carregarEstacoes);
 
@@ -425,6 +417,21 @@ function atualizarUISessao(s) {
     s.tempo_estimado_restante_min != null ? `${Math.round(s.tempo_estimado_restante_min)} min` : "--";
 }
 
+function mostrarModalConclusao(dados) {
+  document.getElementById("conclusao-kwh").textContent = `${Number(dados.kwh_consumido).toFixed(2)} kWh`;
+  document.getElementById("conclusao-custo").textContent = formatarMoeda(dados.custo_total);
+  const ecoEl = document.getElementById("conclusao-eco");
+  ecoEl.textContent =
+    dados.co2_evitado_kg > 0
+      ? `🌱 ${Number(dados.co2_evitado_kg).toFixed(3)} kg de CO2 evitado com energia solar`
+      : "";
+  document.getElementById("modal-conclusao").classList.remove("hidden");
+}
+
+document.getElementById("btn-fechar-modal-conclusao").addEventListener("click", () => {
+  document.getElementById("modal-conclusao").classList.add("hidden");
+});
+
 function iniciarPollingSessao() {
   clearInterval(state.pollSessaoTimer);
   const executar = async () => {
@@ -434,7 +441,7 @@ function iniciarPollingSessao() {
         clearInterval(state.pollSessaoTimer);
         state.sessaoAtivaId = null;
         esconderNavSessao();
-        alert(`Recarga finalizada - ${Number(s.kwh_consumido).toFixed(1)} kWh, ${formatarMoeda(s.custo_total)}`);
+        mostrarModalConclusao(s);
         await atualizarVeiculoAtual();
         mostrar("home");
         loadHome();
@@ -461,7 +468,7 @@ document.getElementById("btn-parar-sessao").addEventListener("click", async () =
     clearInterval(state.pollSessaoTimer);
     state.sessaoAtivaId = null;
     esconderNavSessao();
-    alert(resp.mensagem);
+    mostrarModalConclusao(resp);
     await atualizarVeiculoAtual();
     mostrar("home");
     loadHome();

@@ -97,20 +97,6 @@
           <p class="subtitulo sem-margem" id="home-estimativa-texto"></p>
         </div>
 
-        <div class="card resumo-predio">
-          <div class="resumo-linha">
-            <span>Potência do prédio</span>
-            <span id="home-pico-tag" class="tag hidden">horário de pico</span>
-          </div>
-          <div class="barra-potencia">
-            <div id="home-barra-fill" class="barra-potencia-fill"></div>
-          </div>
-          <div class="resumo-linha pequeno">
-            <span id="home-potencia-uso">0 kW em uso</span>
-            <span id="home-potencia-max">/ 0 kW</span>
-          </div>
-        </div>
-
         <div class="secao-titulo">
           <h2>Seu veículo</h2>
           <button id="btn-trocar-veiculo" class="link-btn">+ novo veículo</button>
@@ -226,6 +212,20 @@
           <div><span class="label">Potência em uso</span><span id="modal-estacao-potencia" class="valor">-</span></div>
         </div>
         <p class="dica" style="margin-top:14px">Por privacidade, não mostramos dados de quem está carregando (bateria, custo ou tempo restante).</p>
+      </div>
+    </div>
+
+    <!-- MODAL: RECARGA CONCLUIDA -->
+    <div id="modal-conclusao" class="modal-overlay hidden">
+      <div class="modal-card" style="text-align:center">
+        <div style="font-size:44px;line-height:1">🎉</div>
+        <h2 style="margin-top:10px">Recarga concluída!</h2>
+        <div class="grid-status" style="margin-top:16px;text-align:left">
+          <div><span class="label">kWh consumido</span><span id="conclusao-kwh" class="valor">0</span></div>
+          <div><span class="label">Custo total</span><span id="conclusao-custo" class="valor">R$ 0,00</span></div>
+        </div>
+        <p class="conclusao-eco" id="conclusao-eco"></p>
+        <button id="btn-fechar-modal-conclusao" class="btn-primary">Entendi!</button>
       </div>
     </div>
   </div>

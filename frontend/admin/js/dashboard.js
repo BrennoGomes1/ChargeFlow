@@ -143,6 +143,9 @@ async function carregarSustentabilidade() {
   }
 }
 
+const MEDALHAS_RANKING = ["🥇", "🥈", "🥉"];
+let premioUsuarioId = null;
+
 async function carregarRanking() {
   try {
     const lista = await api("/api/dashboard/ranking");
@@ -155,18 +158,94 @@ async function carregarRanking() {
     container.innerHTML = lista
       .map(
         (item, i) => `
-        <div class="ranking-item">
-          <span class="ranking-pos">#${i + 1}</span>
+        <div class="ranking-item ${i < 3 ? "ranking-top" : ""}">
+          <span class="ranking-pos">${MEDALHAS_RANKING[i] || `#${i + 1}`}</span>
           <div class="ranking-info">
             <div class="ranking-nome">${item.nome} ${item.empresa ? `<span class="ranking-empresa">- ${item.empresa}</span>` : ""}</div>
             <div class="ranking-barra-trilho"><div class="ranking-barra-fill" style="width:${(item.kwh_total / maiorKwh) * 100}%"></div></div>
           </div>
           <span class="ranking-valor">${formatarKwh(item.kwh_total)}</span>
+          ${i < 3 ? `<button class="link-btn btn-premiar" data-id="${item.usuario_id}" data-nome="${item.nome}">🏆 premiar</button>` : ""}
         </div>`
       )
       .join("");
+
+    container.querySelectorAll(".btn-premiar").forEach((btn) => {
+      btn.addEventListener("click", () => abrirModalPremio(Number(btn.dataset.id), btn.dataset.nome));
+    });
   } catch (err) {
     console.error(err);
     mostrarErroGeral("Não foi possível carregar o ranking. " + err.message, carregarRanking);
+  }
+}
+
+function abrirModalPremio(usuarioId, nome) {
+  premioUsuarioId = usuarioId;
+  document.getElementById("premio-usuario-nome").textContent = `Premiar ${nome}`;
+  const erroEl = document.getElementById("premio-erro");
+  erroEl.textContent = "";
+  erroEl.style.color = "";
+  document.getElementById("premio-valor").value = 30;
+  document.getElementById("modal-premio").classList.remove("hidden");
+}
+
+document.getElementById("btn-fechar-modal-premio").addEventListener("click", () => {
+  document.getElementById("modal-premio").classList.add("hidden");
+});
+document.getElementById("modal-premio").addEventListener("click", (e) => {
+  if (e.target.id === "modal-premio") e.target.classList.add("hidden");
+});
+
+document.getElementById("btn-confirmar-premio").addEventListener("click", async () => {
+  const erroEl = document.getElementById("premio-erro");
+  erroEl.textContent = "";
+  erroEl.style.color = "";
+  const valor = Number(document.getElementById("premio-valor").value);
+  if (!valor || valor <= 0) {
+    erroEl.textContent = "Informe um valor válido.";
+    return;
+  }
+  try {
+    const resp = await api(`/api/usuarios/${premioUsuarioId}/premiar`, {
+      method: "POST",
+      body: { valor },
+    });
+    erroEl.style.color = "var(--verde-good)";
+    erroEl.textContent = `✅ ${resp.mensagem}`;
+    setTimeout(() => {
+      document.getElementById("modal-premio").classList.add("hidden");
+      carregarRanking();
+    }, 1500);
+  } catch (err) {
+    erroEl.textContent = err.message;
+  }
+});
+
+async function carregarHistorico() {
+  try {
+    const lista = await api("/api/dashboard/historico");
+    const container = document.getElementById("historico-linhas");
+    if (lista.length === 0) {
+      container.innerHTML = `<tr><td colspan="7" class="vazio">Nenhuma recarga finalizada ainda</td></tr>`;
+      return;
+    }
+    container.innerHTML = lista
+      .map((s) => {
+        const data = new Date(s.fim || s.inicio).toLocaleString("pt-BR");
+        return `
+        <tr>
+          <td>${data}</td>
+          <td>${s.usuario_nome}${s.usuario_empresa ? ` <span class="ranking-empresa">- ${s.usuario_empresa}</span>` : ""}</td>
+          <td>${s.veiculo_placa} - ${s.veiculo_modelo}</td>
+          <td>${s.estacao_nome}</td>
+          <td>${Number(s.kwh_consumido).toFixed(2)}</td>
+          <td>${formatarMoeda(s.custo_total)}</td>
+          <td>${Number(s.co2_evitado_kg).toFixed(3)} kg</td>
+        </tr>`;
+      })
+      .join("");
+  } catch (err) {
+    console.error(err);
+    mostrarErroGeral("Não foi possível carregar o histórico. " + err.message, carregarHistorico);
   }
 }

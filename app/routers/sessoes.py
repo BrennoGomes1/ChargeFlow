@@ -272,6 +272,8 @@ def status_sessao(
             limite_custo=float(sessao.limite_custo) if sessao.limite_custo is not None else None,
             tempo_decorrido_min=round((sessao.fim - sessao.inicio).total_seconds() / 60, 1) if sessao.fim else 0,
             tempo_estimado_restante_min=None,
+            kwh_solar=float(sessao.kwh_solar),
+            co2_evitado_kg=float(sessao.co2_evitado_kg),
         )
 
     config = _config(db)
@@ -313,6 +315,8 @@ def status_sessao(
             limite_custo=float(sessao.limite_custo) if sessao.limite_custo is not None else None,
             tempo_decorrido_min=round((sessao.fim - sessao.inicio).total_seconds() / 60, 1),
             tempo_estimado_restante_min=0,
+            kwh_solar=float(sessao.kwh_solar),
+            co2_evitado_kg=float(sessao.co2_evitado_kg),
         )
 
     kwh_alvo = float(veiculo.capacidade_bateria_kwh) * (float(sessao.limite_percent) - bateria_inicial) / 100

@@ -3,9 +3,17 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.models.estacao import Estacao
 from app.models.sessao import Sessao
 from app.models.usuario import Usuario
-from app.schemas.dashboard import ConsumoOut, ConsumoPontoOut, RankingItemOut, SustentabilidadeOut
+from app.models.veiculo import Veiculo
+from app.schemas.dashboard import (
+    ConsumoOut,
+    ConsumoPontoOut,
+    HistoricoItemOut,
+    RankingItemOut,
+    SustentabilidadeOut,
+)
 from app.security import exigir_admin
 
 router = APIRouter(prefix="/api/dashboard", tags=["Dashboard (Admin)"])
@@ -76,6 +84,7 @@ def sustentabilidade(db: Session = Depends(get_db), _admin: Usuario = Depends(ex
 def ranking(db: Session = Depends(get_db), _admin: Usuario = Depends(exigir_admin)):
     linhas = (
         db.query(
+            Usuario.id,
             Usuario.nome,
             Usuario.empresa,
             func.coalesce(func.sum(Sessao.kwh_consumido), 0).label("kwh"),
@@ -91,6 +100,7 @@ def ranking(db: Session = Depends(get_db), _admin: Usuario = Depends(exigir_admi
 
     return [
         RankingItemOut(
+            usuario_id=linha.id,
             nome=linha.nome,
             empresa=linha.empresa,
             kwh_total=float(linha.kwh),
@@ -98,4 +108,41 @@ def ranking(db: Session = Depends(get_db), _admin: Usuario = Depends(exigir_admi
             sessoes=linha.sessoes,
         )
         for linha in linhas
+    ]
+
+
+@router.get("/historico", response_model=list[HistoricoItemOut])
+def historico_admin(
+    limite: int = Query(50, ge=1, le=200),
+    db: Session = Depends(get_db),
+    _admin: Usuario = Depends(exigir_admin),
+):
+    linhas = (
+        db.query(Sessao, Usuario, Veiculo, Estacao)
+        .join(Usuario, Sessao.usuario_id == Usuario.id)
+        .join(Veiculo, Sessao.veiculo_id == Veiculo.id)
+        .join(Estacao, Sessao.estacao_id == Estacao.id)
+        .filter(Sessao.status == "finalizada")
+        .order_by(Sessao.fim.desc())
+        .limit(limite)
+        .all()
+    )
+
+    return [
+        HistoricoItemOut(
+            id=sessao.id,
+            inicio=sessao.inicio,
+            fim=sessao.fim,
+            usuario_nome=usuario.nome,
+            usuario_empresa=usuario.empresa,
+            veiculo_placa=veiculo.placa,
+            veiculo_modelo=veiculo.modelo,
+            estacao_nome=estacao.nome,
+            kwh_consumido=float(sessao.kwh_consumido),
+            custo_total=float(sessao.custo_total),
+            tarifa_aplicada=float(sessao.tarifa_aplicada) if sessao.tarifa_aplicada is not None else None,
+            kwh_solar=float(sessao.kwh_solar),
+            co2_evitado_kg=float(sessao.co2_evitado_kg),
+        )
+        for sessao, usuario, veiculo, estacao in linhas
     ]

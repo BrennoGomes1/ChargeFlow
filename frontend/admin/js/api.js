@@ -114,6 +114,7 @@ function mostrarSecao(secao) {
   if (secao === "consumo") carregarConsumo();
   if (secao === "sustentabilidade") carregarSustentabilidade();
   if (secao === "ranking") carregarRanking();
+  if (secao === "historico") carregarHistorico();
 }
 
 function entrarNoPainel() {
