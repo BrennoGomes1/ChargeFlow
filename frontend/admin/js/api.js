@@ -109,7 +109,11 @@ function mostrarSecao(secao) {
   document.getElementById(`secao-${secao}`).classList.remove("hidden");
   document.querySelectorAll(".nav-item").forEach((btn) => btn.classList.toggle("active", btn.dataset.secao === secao));
 
-  if (secao === "visao-geral") carregarVisaoGeral();
+  // A visao geral e a unica tela "ao vivo" (mapa de vagas, potencia) - so ela
+  // fica se atualizando sozinha enquanto estiver aberta, pra nao gastar
+  // requisicao a toa nas outras secoes.
+  pararPollingVisaoGeral();
+  if (secao === "visao-geral") iniciarPollingVisaoGeral();
   if (secao === "usuarios") carregarUsuarios();
   if (secao === "consumo") carregarConsumo();
   if (secao === "sustentabilidade") carregarSustentabilidade();
@@ -124,6 +128,7 @@ function entrarNoPainel() {
 }
 
 function fazerLogout() {
+  pararPollingVisaoGeral();
   estadoAuth.token = null;
   estadoAuth.usuario = null;
   localStorage.removeItem("cf_admin_token");

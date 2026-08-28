@@ -1,5 +1,17 @@
 let graficoConsumo = null;
 let periodoAtual = "dia";
+let pollVisaoGeralTimer = null;
+
+function iniciarPollingVisaoGeral() {
+  clearInterval(pollVisaoGeralTimer);
+  carregarVisaoGeral();
+  pollVisaoGeralTimer = setInterval(carregarVisaoGeral, 6000);
+}
+
+function pararPollingVisaoGeral() {
+  clearInterval(pollVisaoGeralTimer);
+  pollVisaoGeralTimer = null;
+}
 
 async function carregarVisaoGeral() {
   try {
