@@ -81,8 +81,8 @@ servico) e **git**.
 ### 1. Clonar o repositorio
 
 ```bash
-git clone <URL_DO_REPOSITORIO_NO_GITHUB>
-cd chargeflow
+git clone https://github.com/BrennoGomes1/ChargeFlow.git
+cd ChargeFlow
 ```
 
 ### 2. Criar o banco e o usuario do projeto
