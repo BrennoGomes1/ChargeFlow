@@ -193,12 +193,10 @@ Veja a lista completa e interativa em `/docs`. Resumo:
 - `GET /api/dashboard/consumo`, `GET /api/dashboard/sustentabilidade`,
   `GET /api/dashboard/ranking` (somente admin)
 
-## Checklist para o Next
+## Funcionalidades implementadas
 
 - [x] Back-end FastAPI completo (auth, veiculos, estacoes, sessoes, fila, simulacao, dashboard)
 - [x] Algoritmo de potencia com priorizacao por bateria e reducao em horario de pico
 - [x] Calculo de tarifa pico/fora de pico e de CO2 evitado
 - [x] App mobile do usuario (liberar entrada, iniciar recarga, status em tempo real, historico)
 - [x] Painel admin (mapa de vagas, barra de potencia, graficos, simulacao de cenario, ranking)
-- [ ] Popular o banco com dados reais/mais realistas para a demo
-- [ ] Ensaiar o pitch: problema → solucao → demo ao vivo → impacto
